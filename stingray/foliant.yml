@@ -1,0 +1,32 @@
+title: Stingray
+
+chapters:
+  - Руководство по установке и интеграции:
+    - ag/index.md
+    - ag/trebovaniya_k_infrastrukture.md
+    - ag/ustanovka_stingray.md
+    - ag/zapusk_stingray.md
+    - ag/ostanovka_stingray.md
+    - ag/obnovlenie_sistemy.md
+    - ag/perezagruzka_servera_bez_obnovleniya_stingray.md
+    - Интеграции системы:
+      - ag/integracii_cherez_rest_api.md
+      - ag/sistemy_ci_cd.md
+      - ag/sistema_distribucii_appcenter.md
+      - ag/sistema_distribucii_nexus_repository.md
+      - ag/integraciya_s_firebase.md
+      - ag/integraciya_s_appstore.md
+      - ag/integraciya_c_burp_suite.md
+      - ag/integraciya_s_netsparker.md
+      - ag/integraciya_s_appscreener.md
+      - ag/integraciya_s_oversecured.md
+      - ag/integraciya_s_google_play.md
+    - Настройка мониторинга:
+      - ag/nastrojka_zhurnalov_audita.md
+
+backend_config:
+  pandoc:
+    vars:
+      lang: ru
+      params:
+        pdf_engine: pdflatex

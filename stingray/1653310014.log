@@ -1,0 +1,41 @@
+2022-05-23 12:47:11,997 |           flt.pandoc |    ERROR | Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 296, in _build_flat
+    run(command, shell=True, check=True, stdout=PIPE, stderr=STDOUT)
+  File "/usr/lib/python3.8/subprocess.py", line 512, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command 'pandoc --output "Stingray-2022-05-23.pdf"     -f markdown __folianttmp__/__all__.md' returned non-zero exit status 43.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/utils.py", line 158, in spinner
+    yield
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 382, in make
+    result.append(self._build_flat(target))
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 301, in _build_flat
+    raise RuntimeError(f'Build failed: {exception.output.decode()}')
+RuntimeError: Build failed: [WARNING] Could not fetch resource './img/swith_on.png': replacing image with description
+[WARNING] Could not fetch resource './img/swith_on.png': replacing image with description
+[WARNING] Could not fetch resource './/img/swith_on.png': replacing image with description
+[WARNING] Could not fetch resource './img/swith_on.png': replacing image with description
+[WARNING] Could not fetch resource '../ug/img/grfiter.png': replacing image with description
+[WARNING] Could not fetch resource '../ug/img/grfiter.png': replacing image with description
+[WARNING] Could not fetch resource '../ug/img/grfiter.png': replacing image with description
+[WARNING] Could not fetch resource '../ug/img/bluefilter.png': replacing image with description
+[WARNING] Could not fetch resource '../ug/img/redcross.png': replacing image with description
+[WARNING] Could not fetch resource '../ug/img/3dv.png': replacing image with description
+[WARNING] Could not fetch resource '../ug/img/3dv.png': replacing image with description
+Error producing PDF.
+! Package inputenc Error: Unicode character Р (U+0420)
+(inputenc)                not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.79 ...ux437ux43eux432ux430ux442ux435ux43bux44f}}
+
+Try running pandoc with --pdf-engine=xelatex.
+
+
+2022-05-23 12:47:12,397 |                  flt | CRITICAL | No result returned by backend

@@ -1,0 +1,20 @@
+2022-07-14 06:48:51,577 |           flt.pandoc |    ERROR | Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 358, in _build_flat
+    run(command, shell=True, check=True, stdout=PIPE, stderr=STDOUT)
+  File "/usr/lib/python3.8/subprocess.py", line 512, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command 'pandoc --output "Stingray-2022-07-14.docx"    -f markdown __folianttmp__/__all__.md' returned non-zero exit status 1.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/utils.py", line 158, in spinner
+    yield
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 444, in make
+    result.append(self._build_flat(target))
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 363, in _build_flat
+    raise RuntimeError(f'Build failed: {exception.output.decode()}')
+RuntimeError: Build failed: pandoc: Stingray-2022-07-14.docx: openBinaryFile: permission denied (Permission denied)
+
+
+2022-07-14 06:48:51,823 |                  flt | CRITICAL | No result returned by backend

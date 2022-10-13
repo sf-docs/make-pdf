@@ -1,0 +1,17 @@
+2022-10-13 15:17:46,957 |                  flt |    ERROR | Traceback (most recent call last):
+  File "C:\Users\aglad\AppData\Local\Programs\Python\Python310\lib\site-packages\foliant\cli\make.py", line 100, in get_config
+    config = Parser(project_path, config_file_name, self.logger, quiet).parse()
+  File "C:\Users\aglad\AppData\Local\Programs\Python\Python310\lib\site-packages\foliant\config\base.py", line 37, in parse
+    with open(self.config_path, encoding='utf8') as config_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'foliant.yml'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\aglad\AppData\Local\Programs\Python\Python310\lib\site-packages\foliant\utils.py", line 158, in spinner
+    yield
+  File "C:\Users\aglad\AppData\Local\Programs\Python\Python310\lib\site-packages\foliant\cli\make.py", line 104, in get_config
+    raise FileNotFoundError(f'{exception} not found')
+FileNotFoundError: [Errno 2] No such file or directory: 'foliant.yml' not found
+
+2022-10-13 15:17:46,958 |                  flt | CRITICAL | Config parsing failed.

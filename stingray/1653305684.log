@@ -1,0 +1,40 @@
+2022-05-23 11:34:46,313 |           flt.pandoc |    ERROR | Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/base.py", line 67, in apply_preprocessor
+    preprocessor_module.Preprocessor(
+  File "/usr/local/lib/python3.8/dist-packages/foliant/preprocessors/flatten.py", line 87, in apply
+    flat_src = includes.Preprocessor(
+  File "/usr/local/lib/python3.8/dist-packages/foliant/preprocessors/includes.py", line 902, in process_includes
+    processed_content_part = self._process_include(
+  File "/usr/local/lib/python3.8/dist-packages/foliant/preprocessors/includes.py", line 681, in _process_include
+    with open(included_file_path, encoding='utf8') as included_file:
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/src/app/__folianttmp__/autentifikaciya_polzovatelya.md'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/utils.py", line 158, in spinner
+    yield
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/base.py", line 79, in apply_preprocessor
+    raise RuntimeError(
+RuntimeError: Failed to apply preprocessor flatten: [Errno 2] No such file or directory: '/usr/src/app/__folianttmp__/autentifikaciya_polzovatelya.md'
+
+2022-05-23 11:34:46,383 |           flt.pandoc |    ERROR | Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 296, in _build_flat
+    run(command, shell=True, check=True, stdout=PIPE, stderr=STDOUT)
+  File "/usr/lib/python3.8/subprocess.py", line 512, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command 'pandoc --output "Stingray-2022-05-23.docx"    -f markdown __folianttmp__/__all__.md' returned non-zero exit status 1.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/foliant/utils.py", line 158, in spinner
+    yield
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 382, in make
+    result.append(self._build_flat(target))
+  File "/usr/local/lib/python3.8/dist-packages/foliant/backends/pandoc.py", line 301, in _build_flat
+    raise RuntimeError(f'Build failed: {exception.output.decode()}')
+RuntimeError: Build failed: pandoc: __folianttmp__/__all__.md: openBinaryFile: does not exist (No such file or directory)
+
+
+2022-05-23 11:34:46,454 |                  flt | CRITICAL | No result returned by backend
