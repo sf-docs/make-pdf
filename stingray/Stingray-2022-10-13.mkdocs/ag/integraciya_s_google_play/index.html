@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Интеграция с Google Play - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../integraciya_s_oversecured/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../nastrojka_zhurnalov_audita/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#google-play" class="nav-link">Интеграция с Google Play</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Сбор необходимых параметров</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Пример запуска скрипта</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="google-play">Интеграция с Google Play</h1>
+<p>Интеграция с Google Play осуществляется с помощью скрипта <a href="https://github.com/Dynamic-Mobile-Security/mdast-cli">mdast_scan.py</a>.</p>
+<h2 id="_1">Сбор необходимых параметров</h2>
+<p>!!! note "Примечание"
+    Поскольку передача учетных данных осуществляется в незащищенном виде, для интеграции с Google Play следует использовать специально выделенный для этих целей сервисный Google-аккаунт. Двухфакторная аутентификация для аккаунта должна быть отключена. </p>
+<p>При предварительном запуске скрипта обязательна передача следующих параметров:</p>
+<ul>
+<li>
+<p><code>google_play_package_name</code> — имя скачиваемого пакета. Чтобы узнать имя пакета приложения, можно открыть его страницу в Google Play — имя пакета является частью URL (параметр <code>id</code>);</p>
+<p><figure markdown>
+<img alt="" src="../img/32.png" />
+</figure></p>
+</li>
+<li>
+<p><code>google_play_email</code> — электронная почта аккаунта Google;</p>
+</li>
+<li><code>google_play_password</code> — пароль аккаунта Google;</li>
+<li><code>distribution_system</code> — для Google Play указываем значение <code>google_play</code>.</li>
+</ul>
+<p>!!! note "Примечание"
+    Если на этом этапе необходимо скачать приложение, добавьте параметр <code>--google_play_download_with_creds</code>.</p>
+<p>Результатом будут следующие сообщения:</p>
+<pre><code>20/04/2022 15:03:36 - INFO Google Play - Google Play integration, trying to login
+20/04/2022 15:03:36 - INFO Google Play - Logging in with email and password, you should copy token after
+20/04/2022 15:03:38 - INFO Google Play - gsfId: 36**********2297818, authSubToken: Jg**********RjqFD_pGqcTFjodc_mBULuauit8o1uB4-AKFaFKHr6wb9serwzgwLBIRvA.
+20/04/2022 15:03:38 - INFO Google Play - You should copy these parameters and use them for next scans instead of email and password:
+20/04/2022 15:03:38 - INFO Google Play - "--google_play_gsfid 36**********2297818 --google_play_auth_token Jgju_**********FD_pGqcTFjodc_mBULuauit8o1uB4-AKFaFKHr6wb9serwzgwLBIRvA."
+</code></pre>
+<p>В последней строке указаны два параметра <code>--google_play_gsfid</code> и <code>--google_play_auth_token</code>, которые необходимо скопировать. В дальнейшем они будут использоваться для скачивания приложения и запуска сканирования. Использование этих параметров вместо электронной почты и пароля позволит избежать дальнейших проверок безопасности в браузере.</p>
+<h2 id="_2">Пример запуска скрипта</h2>
+<p>После получения необходимых параметров можно, запустив скрипт, скачать приложение и запустить его ручное сканирование.</p>
+<pre><code>python mdast_cli/mdast_scan.py \
+  --profile_id 1337 \
+  --architecture_id 1 \
+  --distribution_system google_play \
+  --url "https://saas.mobile.appsec.world" \
+  --company_id 1 \
+  --token 5d5f6c98*********487a68ee20d4562d9f \
+  --google_play_package_name com.instagram.android \
+  --google_play_gsfid 432******************43 \
+  --google_play_auth_token JAgw_2h*************************************8KRaYQ.
+  --google_play_file_name best_apk_d0wnl04d3r
+</code></pre>
+<p>В результате приложение будет скачано в папку <code>downloaded_apps</code> под именем <code>best_apk_d0wnl04d3r.apk</code>, а также запустится ручное сканирование.</p>
+<p>!!! note "Примечание"
+    Более подробная информация о параметрах скрипта приведена в разделе «<a href="../sistemy_ci_cd/">Системы CI/CD</a>».</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

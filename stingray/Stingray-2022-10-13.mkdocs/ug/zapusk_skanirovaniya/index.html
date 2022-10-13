@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Запуск сканирования - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Запуск сканирования</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Автоматическое сканирование</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Ручное сканирование</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Запуск сканирования из командной строки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_5" class="nav-link">Запуск сканирования из систем сборки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Запуск сканирования</h1>
+<p>Запуск сканирования может быть произведен в ручном или в автоматическом режиме. Для запуска сканирования выберите пункт основного меню <strong>Сканы</strong> и нажмите кнопку <strong>Добавить сканирование</strong> в правом верхнем углу.</p>
+<figure markdown>
+![](img/28.png)
+</figure>
+
+<p>Выберите или перетащите на появившуюся страницу <strong>Добавить сканирование</strong> apk-файл или ipa-файл сканируемого приложения:</p>
+<figure markdown>
+![](img/29.png)
+</figure>
+
+<p>!!! note "Примечание"
+    Если пакет с выбранным именем и хеш-суммой уже загружен, в целях экономии ресурсов его повторная загрузка не производится, а используется файл, уже имеющийся на сервере.</p>
+<figure markdown>
+![](img/30.png)
+</figure>
+
+<p>После выбора файла на странице <strong>Добавить сканирование</strong> будут представлены необходимые для запуска анализа приложения поля:</p>
+<ul>
+<li>Информация о файле тестируемого приложения: <strong>имя пакета</strong>, <strong>название/код версии</strong>, <strong>Target SDK</strong>, <strong>Min SDK</strong>, <strong>имя/размер/хеш файла</strong> и <strong>тип архитектуры</strong>.</li>
+<li>
+<p><strong>Проект</strong> — проект, в рамках которого будет проводиться сканирование.</p>
+<p>!!! note "Примечание"
+    Для выбора доступны либо проекты с незаполненным при создании полем <strong>Имя пакета</strong> (см. раздел «<a href="../projects/">Проекты</a>»), либо те, для которых в данном поле указан пакет, выбранный в предыдущем шаге. Таким образом, не исключена ситуация, когда в данном поле будут отсутствовать доступные для выбора элементы. В этом случае следует создать новый проект с пустым полем <strong>Имя пакета</strong> или, указав в нем соответствующий пакет.</p>
+</li>
+<li>
+<p><strong>Профиль</strong> — профиль сканирования, для которого будет проводиться сканирование.</p>
+</li>
+<li><strong>Режим</strong> — ручное или автоматическое сканирование.</li>
+<li>
+<p><strong>Тест-кейс</strong> — эта опция появляется в случае выбора автоматического режима и позволяет выбрать тест-кейса, который будет воспроизведен.</p>
+<p>!!! note "Примечание"
+    Отображаются только тест-кейсы выбранного проекта.</p>
+</li>
+<li>
+<p><strong>Архитектура</strong> — архитектура устройства, на котором будет запущено приложение.</p>
+<p>!!!note "Примечание"
+    При отсутствии доступных для выполнения сканирования агентов в поле <strong>Архитектура</strong> отображается сообщение <strong>Отсутствуют запущенные устройства для данной архитектуры</strong>.</p>
+</li>
+</ul>
+<h2 id="_2">Автоматическое сканирование</h2>
+<p>Для запуска сканирования в автоматическом режиме необходимо сделать следующие шаги:</p>
+<ul>
+<li>
+<p>Выбрать и загрузить файл мобильного приложения с расширением *.apk или *.ipa, для которого будет проводиться сканирование.</p>
+<p>!!! note "Примечание"
+    Если пакет с выбранным именем и хеш-суммой уже загружен, в целях экономии ресурсов его повторная загрузка не производится, а используется файл, уже имеющийся на сервере.</p>
+</li>
+<li>
+<p>Выбрать проект из выпадающего списка существующих в системе проектов.</p>
+<p>!!! note "Примечание"
+    Для выбора доступны либо проекты с незаполненным при создании полем <strong>Имя пакета</strong> (см. раздел «<a href="../projects/">Проекты</a>»), либо те, для которых в данном поле указан пакет, выбранный в предыдущем шаге. Таким образом, не исключена ситуация, когда в данном поле будут отсутствовать доступные для выбора элементы. В этом случае следует создать новый проект с пустым полем <strong>Имя пакета</strong> или, указав в нем соответствующий пакет.</p>
+</li>
+<li>
+<p>Выбрать профиль сканирования из выпадающего списка.</p>
+</li>
+<li>Выбрать архитектуру, на которой будет проводиться сканирование. Отметим, что в данном поле будет доступна для выбора только та архитектура, на которой был записан тест-кейс и которая активна в системе.</li>
+<li>В поле <strong>Режим</strong> выбрать <strong>Автоматическое</strong> сканирование из выпадающего списка.</li>
+<li>Во вновь появившемся внизу поле выбрать имя уже существующего в системе тест-кейса для запуска сканирования в автоматическом режиме.</li>
+</ul>
+<figure markdown>
+![](img/31.png)
+</figure>
+
+<p>По нажатию кнопки <strong>Запустить</strong> происходит запуск сканирования и переход на страницу <strong>Сканирование</strong>. Будет отображена страница с экраном устройства без возможности взаимодействия с ним. Передача изображения с экрана устройства необходима для анализа работы тест-кейса. В ходе сканирования на экране устройства отображаются следующие статусы:</p>
+<ul>
+<li><strong>Поиск свободного устройства</strong> — осуществляется поиск свободного сканирующего агента.</li>
+<li><strong>Запуск приложения</strong> — выполняется запуск приложения.</li>
+</ul>
+<figure markdown>
+![](img/32.png)
+</figure>
+
+<p>Во время проведения автоматического сканирования также идет запись видео, которое при завершении доступно на вкладке <strong>Запись</strong> сканирования на странице с детальными результатами сканирования для данного теста.</p>
+<p>При нажатии на кнопку <strong>К результатам сканирований</strong> будет осуществлен переход к странице со списком всех сканирований. При переходе на страницу <strong>Список сканирований</strong> можно увидеть новую строку, отображающую текущий результат автоматического сканирования. При нажатии на <strong>ID</strong> тест-кейса, когда соответствующее сканирование имеет состояние <strong>Создан</strong>, <strong>Запускается</strong> или <strong>Запущен</strong>, происходит возврат на страницу с экраном устройства. После завершения сканирования приложения его состояние примет значение <strong>Анализ</strong> на время обработки полученных результатов. Затем состояние сканирования поменяется на <strong>Успешно</strong> или <strong>Неуспешно</strong> в зависимости от результата. Если нажать на <strong>ID</strong> тест-кейса, когда сканирование имеет состояние <strong>Анализ</strong>, <strong>Успешно</strong> или <strong>Неуспешно</strong>, произойдет переход на страницу с детальными результатами сканирования, см. раздел «<a href="../rezultaty_skanirovanij/">Результаты сканирований</a>».</p>
+<h2 id="_3">Ручное сканирование</h2>
+<p>Для запуска ручного сканирования выберите пункт основного меню <strong>Сканы</strong> и нажмите кнопку <strong>Добавить сканирование</strong> в правом верхнем углу. Выберите или перетащите на появившуюся страницу <strong>Добавить сканирование</strong> apk-файл или ipa-файл сканируемого приложения. При загрузке файла система определит его архитектуру и отфильтрует все возможные подходящие значения в полях на появившейся странице:</p>
+<figure markdown>
+![](img/34.png)
+</figure>
+
+<p>!!! note "Примечание"
+    Если пакет с выбранным именем и хеш-суммой уже загружен, в целях экономии ресурсов его повторная загрузка не производится, а используется файл, уже имеющийся на сервере.</p>
+<p>Для запуска сканирования в ручном режиме необходимо сделать следующие шаги:</p>
+<ul>
+<li>
+<p>Выбрать проект из выпадающего списка существующих в системе проектов.</p>
+<p>!!! note "Примечание"
+    Для выбора доступны либо проекты с незаполненным при создании полем <strong>Имя пакета</strong> (см. раздел «<a href="../projects/">Проекты</a>»), либо те, для которых в данном поле указан пакет, выбранный в предыдущем шаге. Таким образом, не исключена ситуация, когда в данном поле будут отсутствовать доступные для выбора элементы. В этом случае следует создать новый проект с пустым полем <strong>Имя пакета</strong> или, указав в нем соответствующий пакет.</p>
+</li>
+<li>
+<p>Выбрать профиль сканирования из выпадающего списка.</p>
+</li>
+<li>Выбрать архитектуру, на которой будет проводиться сканирование.</li>
+<li>В поле <strong>Режим</strong> выбрать <strong>Ручное</strong> сканирование из выпадающего списка.</li>
+</ul>
+<figure markdown>
+![](img/33.png)
+</figure>
+
+<p>По нажатию кнопки <strong>Запустить</strong> происходит запуск сканирования и переход на страницу <strong>Сканирование</strong>. Будет отображена страница с экраном устройства и с запущенным приложением. Ручное сканирование выглядит, как обычная работа пользователя с приложением. Все действия пользователя записываются в виде последовательности шагов тест-кейса.</p>
+<figure markdown>
+![](img/35.png)
+</figure>
+
+<figure markdown>
+![](img/36.png)
+</figure>
+
+<p>После того, как все необходимые действия по сканированию приложения были сделаны, нажмите кнопку <strong>Остановить</strong>. После нажатия сканирование будет остановлено, система перейдет в режим анализа данных. При нажатии на кнопку <strong>К результатам сканирований</strong> будет осуществлен переход к странице со списком всех сканирований. Идентифицировать полученные результаты ручного сканирования можно по данным в столбце <strong>Изменен</strong>.</p>
+<p>Следует отметить, что для обработки только что полученных результатов ручного сканирования требуется некоторое время, поэтому для детального просмотра и анализа результатов необходимо дождаться окончания их обработки. Статус сканирования в столбце <strong>Состояние</strong> может принимать нескольких значений:</p>
+<ul>
+<li><strong>Создан</strong> — сканирование создано и помещено в очередь сканирования.</li>
+<li><strong>Запускается</strong> — сканирование уже в обработке и перед запуском проходит необходимая техническая предварительная работа (установка приложения, его запуск и т. д.).</li>
+<li><strong>Запущен</strong> — происходит процесс сканирования и взаимодействие с приложением, в зависимости от типа сканирования, вручную или через тест-кейсы.</li>
+<li><strong>Анализ</strong> — взаимодействие с приложением закончено, идет процесс анализа собранных данных.</li>
+<li><strong>Неуспешно</strong> — сканирование завершилось с ошибкой.</li>
+<li><strong>Успешно</strong> — сканирование завершено успешно.</li>
+<li><strong>Отменен</strong> — сканирование отменено с использованием расположенного справа раскрывающегося меню.</li>
+<li><strong>Ожидание повторного анализа</strong> — был запущен и еще не завершился повторный анализ результатов сканирования.</li>
+</ul>
+<figure markdown>
+![](img/37.png)
+</figure>
+
+<h2 id="_4">Запуск сканирования из командной строки</h2>
+<p>Сканирование приложения можно запустить не только из пользовательского интерфейса системы, но также из командной строки. Процесс формирования командной строки и запуска сканирования подробно описан в разделе «<a href="../../ag/integracii/">Интеграции</a>».</p>
+<h2 id="_5">Запуск сканирования из систем сборки</h2>
+<p>Для запуска сканирования приложений из систем сборки созданы средства инструментальной поддержки, позволяющие значительно упростить этот процесс.</p>
+<p>Запуск сканирования из систем сборки подробно описан в разделе «<a href="../../ag/integracii/">Интеграции</a>».</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

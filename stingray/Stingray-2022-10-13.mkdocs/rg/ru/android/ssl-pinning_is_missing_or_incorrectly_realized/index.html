@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Отсутствует или некорректно реализован SSL-pinning - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#ssl-pinning" class="nav-link">Отсутствует или некорректно реализован SSL-pinning</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_6" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="ssl-pinning">Отсутствует или некорректно реализован SSL-pinning</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_vysokij.png"/></td>
+        <td>Критичность:<strong> ВЫСОКАЯ</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> SAST, APK</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_1">Описание</h2>
+<p>Недостаточное внимание к настройке правильного клиент-серверного взаимодействия может привести к перехвату трафика между приложением и сервером. Модель злоумышленника в таком случае может быть самой разной, к примеру, публичные Wi-Fi сети, скомпрометированные сетевые устройства, злоумышленник в одной сети с устройством и т. д.</p>
+<p>Классической атакой, которая возможна в случае отсутствия или некорректной реализации защиты от перехвата трафика, является MiTM («Man in the Middle») или «Человек по середине».</p>
+<p>Наглядно процесс этой атаки представлен на картинке ниже:</p>
+<figure markdown>
+![](../../img/image14.png)
+<figcaption>Рис. 1. Схема атаки Man-In-The-Middle</figcaption>
+</figure>
+
+<p>На данном изображении происходит примерно следующее:</p>
+<ol>
+<li>
+<p>Приложение обращается к своему серверу через точку доступа, подконтрольную злоумышленнику. </p>
+</li>
+<li>
+<p>На этой точке доступа развернут Proxy-сервер, через который проходит весь трафик.</p>
+</li>
+<li>
+<p>При подключении к данной точке доступа клиенту предлагают установить сертификат корневого центра сертификации, чтобы пользоваться интернетом (через функциональность Captive portal).</p>
+</li>
+<li>
+<p>На каждый запрос, проходящий через Proxy, он генерирует собственный сертификат, подписанный своим корневым сертификатом (и этот же сертификат уже установлен на клиентском устройстве).</p>
+</li>
+</ol>
+<p>В такой конфигурации весь трафик приложения будет доступен злоумышленнику, так как он выдает себя за конечного адресата мобильного устройства и при установке «защищенного» соединения отдает свой сертификат со своим ключом. И именно с Proxy-сервером устанавливается защищенное соединение по классической схеме, представленной ниже (сервер в данном случае — это Proxy злоумышленника):</p>
+<figure markdown>
+![](../../img/image15.png)
+<figcaption>Рис. 2. Процесс SSL-Handshake</figcaption>
+</figure>
+
+<p>С другой стороны, Proxy-сервер устанавливает аналогичное соединение с backend мобильного приложения и передает ему данные, которые пришли от клиента. Но в этот момент он может полностью читать или модифицировать данные, которые ему пришли от мобильного приложения.</p>
+<p>Такая атака возможна только в случае, если приложение доверяет сертификатам, хранящимся в пользовательском хранилище, и если не реализована защита в виде SSL-Pinning. Тем не менее, подобные атаки достаточно часто используются и распространены.</p>
+<h2 id="_2">Рекомендации</h2>
+<p>Основной рекомендацией в данном случае является использование SSL-Pinning. Суть этого метода в том, что на этапе SSL-Handshake (Рис. 2) после второго шага, когда сервер присылает нам свой сертификат с открытым ключом, приложение проверяет, что определенные параметры этого сертификата совпадают с тем, что ожидает получить приложение (то есть некоторые данные, которые «зашиты» в приложении и которые мы ожидаем получить от своего сервера). Схематично это изображено на рисунке 3.</p>
+<figure markdown>
+![](../../img/image16.png)
+<figcaption>Рис. 3. Процесс SSL-Pinning</figcaption>
+</figure>
+
+<p>Для того, чтобы более точно понимать, как именно его можно реализовать, необходимо понимать, что именно можно проверять, на каких этапах и каким образом это можно реализовать.</p>
+<h3 id="_3">Что такое сертификат</h3>
+<p>Сертификат — это электронный документ, который позволяет проверить аутентичность его предъявителя (пользователя, сервиса, системы). Обычно содержит публичный ключ его владельца, сводную информацию о сертификате (имя владельца, срок действия и т. д.) и информацию о том, кто именно издал этот сертификат.</p>
+<figure markdown>
+![](../../img/image17.png)
+</figure>
+
+<p>Все данные криптографически подписаны выпустившей сертификат организацией (обычно это крупные доверенные компании) и поэтому могут быть проверены в любое время.</p>
+<h3 id="ssl-pinning_1">Какие виды SSL-Pinning бывают</h3>
+<h4 id="certificate-pinning">Certificate Pinning</h4>
+<p>Первая реализация — это Certificate Pinning. В этом случае проверяется непосредственно сам сертификат, включая метаданные (кому выдан сертификат, срок окончания, данные владельца и т. д.). Такая реализация наиболее безопасна, так как даже небольшое изменение в сертификате вызовет несоответствие и приведет к невозможности установить соединение.</p>
+<p>Но у сертификата есть срок действия, поэтому каждый раз, когда выпускается новый сертификат, должна выходить новая версия приложения.</p>
+<h4 id="public-key-pinning">Public key Pinning</h4>
+<p>Это упрощенная реализация проверки сертификата. Во время этой проверки проверяется только открытый ключ вместо всего сертификата. Так как обновление сертификата возможно без изменения открытого ключа, такой способ позволит не выпускать обновление приложения каждый раз при смене сертификата.</p>
+<p>Но стоит иметь ввиду, что в компании должна быть предусмотрена политика ротации таких ключей, так что рано или поздно ключ будет обновлен.</p>
+<h3 id="_4">Какие сертификаты возможно проверять</h3>
+<ol>
+<li>Сертификат конечного сервера, с которым осуществляется соединение.<ol>
+<li>Гарантирует с почти 100% уверенностью, что это ваш сертификат, даже если корневой центр сертификации был скомпрометирован.</li>
+<li>Если сертификат становится недействительным по какой-либо причине (либо по истечении срока действия, либо по компрометации), то осуществить соединение с сервером не получится, пока не выйдет обновление приложения.</li>
+<li>Позволяет использовать самоподписанные сертификаты — что может быть полезно при разработке.</li>
+</ol>
+</li>
+<li>Сертификат промежуточного центра сертификации.<ol>
+<li>Проверяя промежуточный сертификат, вы доверяете промежуточному центру сертификации.</li>
+<li>Пока вы используете того же поставщика сертификатов, любые изменения сертификатов конечного сервера будут работать без обновления приложения.</li>
+</ol>
+</li>
+<li>Сертификат центра сертификации (корневой сертификат, CA).<ol>
+<li>Проверка корневого сертификата означает, что вы доверяете корневому центру сертификации, а также любым посредникам, которые используют данный центр сертификации.</li>
+<li>Если корневой сертификат скомпрометирован, то соединение нельзя считать защищенным и необходимо срочно менять все сертификаты.</li>
+</ol>
+</li>
+<li>Всю цепочку сертификатов.<ol>
+<li>Это самая надежная проверка с точки зрения безопасности, так как проверяются все возможные изменения в любом из сертификатов.</li>
+<li>В то же время — самая сложная в поддержке, так как при изменении любого из сертификатов, участвующих в цепочке, необходимо обновлять приложение.</li>
+</ol>
+</li>
+</ol>
+<h3 id="_5">Как проверять</h3>
+<p>Для каждой из возможных библиотек реализация будет своя собственная, зависящая от конкретной библиотеки и ее версии. Но в Android существует встроенный механизм реализации Pinning на уровне системы, а именно конфигурация сетевого взаимодействия. Конфигурация сетевого взаимодействия — это XML-файл, в котором настраиваются параметры сетевой безопасности для приложения Android. Данная настройка задается специальным атрибутом в <strong><em>AndroidManifest.xml</em></strong> — <code>android:networkSecurityConfig</code>.</p>
+<p>Пример подключения:</p>
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest ... &gt;
+    &lt;application android:networkSecurityConfig="@xml/network_security_config"
+                    ... &gt;
+        ...
+    &lt;/application&gt;
+&lt;/manifest&gt;
+</code></pre>
+<p>Network Security Config позволяет достаточно просто подключить механизм Certificate Pinning в приложении. Но стоит учитывать определенные нюансы. Рассмотрим конфигурацию, которая с первого взгляда выглядит, как правильно настроенная, и разберем, как ее можно немного улучшить:</p>
+<pre><code>&lt;network-security-config&gt;
+    &lt;domain-config&gt;
+        &lt;domain includeSubdomains="true"&gt;example.com&lt;/domain&gt;
+        &lt;pin-set&gt;
+            &lt;pin digest="SHA-256"&gt;7HIpactkIAq2Y49orFOOQKurWxmmSFZhBCoQYcRhJ3Y=&lt;/pin&gt;
+        &lt;/pin-set&gt;
+    &lt;/domain-config&gt;
+&lt;/network-security-config&gt;
+</code></pre>
+<p>Этот пример имеет два небольших недостатка:</p>
+<ol>
+<li>Для отпечатка сертификата (pin-set) не установлен срок действия. </li>
+<li>Нет резервного сертификата.</li>
+</ol>
+<p>Если срок действия вашего сертификата подойдет к концу и в настройках не указан срок действия, приложение перестанет подключаться к серверу и будет выдавать ошибку. Но если установлен срок действия и он подойдет к концу, приложение перейдет на использование доверенных центров сертификации, установленных в системе. И вместо того, чтобы получить неработоспособное приложение, вы получите отсутствие SSL-Pinning в течении некоторого времени, пока не обновите сертификат в приложении.</p>
+<p>Чтобы этого избежать, если вы знаете сертификат, который будет изменен на вашем сервере после истечения срока текущего, можно сразу указать его в настройках «резервных сертификатов».</p>
+<p>Вот пример <strong>наиболее</strong> корректного использования функционала Certificate Pinning:</p>
+<pre><code>&lt;network-security-config&gt;
+    &lt;domain-config&gt;
+        &lt;domain includeSubdomains="true"&gt;example.com&lt;/domain&gt;
+        &lt;pin-set expiration="2021-01-01"&gt;
+            &lt;pin digest="SHA-256"&gt;7HIpactkIAq2Y49orFOOQKurWxmmSFZhBCoQYcRhJ3Y=&lt;/pin&gt;
+            &lt;!-- backup pin --&gt;
+            &lt;pin digest="SHA-256"&gt;fwza0LRMXouZHRC8Ei+4PyuldPDcf3UKgO/04cDM1oE=&lt;/pin&gt;
+        &lt;/pin-set&gt;
+    &lt;/domain-config&gt;
+&lt;/network-security-config&gt;
+</code></pre>
+<p>Несмотря на всё удобство использования Network Security Config, некоторые проверки придется выполнять самостоятельно в коде приложения. Например, все равно нужно будет определить, выполняет ли ваше приложение проверку имени хоста, поскольку Network Security Config не защитит от проблем такого типа.</p>
+<p><strong>Так же перед имплементацией необходимо убедиться, что сторонние библиотеки поддерживают Network Security Config. В противном случае эти средства защиты могут вызвать проблемы в вашем приложении. Кроме того, Network Security Config не поддерживается сетевыми соединениями более низкого уровня, такими как веб-сокеты.</strong></p>
+<p>Далее рассмотрим несколько примеров наиболее популярных библиотек для реализации сетевого взаимодействия и то, как внутри каждой из них можно реализовать SSL-Pinning.</p>
+<h4 id="okhttp">OkHttp</h4>
+<p>При реализации в OkHttp можно воспользоваться классом <a href="https://github.com/square/okhttp/wiki/HTTPS#certificate-pinning">CertificatePinner</a>.</p>
+<pre><code>CertificatePinner certPinner = new CertificatePinner.Builder()
+        .add("appmattus.com",
+            "sha256/4hw5tz+scE+TW+mlai5YipDfFWn1dqvfLG+nU7tq1V8=")
+        .build();
+OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        .certificatePinner(certPinner)
+        .build();
+</code></pre>
+<p><strong>В OkHttp возможно использовать данный функционал, начиная с версии 2.1. Но, к сожалению, ранние версии подвержены <a href="https://medium.com/square-corner-blog/vulnerability-in-okhttps-certificate-pinner-2a7326ad073b#.kkns7f3jk">уязвимости</a>, которая исправлена только в версии выше 2.7.5 и выше 3.2.0. Необходимо убедиться в том, что используемая версия библиотеки не подвержена данной уязвимости.
+</strong></p>
+<h4 id="retrofit">Retrofit</h4>
+<p>Retrofit используется поверх OkHttp, поэтому его использование похоже на аналогичные операции с <code>OkHttpClient</code>, как показано в примере выше.</p>
+<pre><code>Retrofit retrofit = new Retrofit.Builder()
+        .baseUrl("https://appmattus.com")
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .build();
+</code></pre>
+<h4 id="picasso">Picasso</h4>
+<p>Для Picasso, если используется OkHttp, по аналогии с примером выше, необходимо настроить OkHttpClient. В настоящее время Picasso 2 не поддерживает OkHttp 3, поэтому может потребоваться дополнительная библиотека <a href="https://github.com/JakeWharton/picasso2-okhttp3-downloader">Picasso 2 OkHttp3</a>.</p>
+<pre><code>Picasso picasso = new Picasso.Builder(getApplicationContext())
+        .downloader(new OkHttpDownloader(okHttpClient))
+        .build();
+Picasso.setSingletonInstance(picasso);
+</code></pre>
+<p>Реализация при помощи <code>UrlConnectionDownloader</code> немного сложнее, но возможно реализовать аналогичный метод, как в библиотеке Volley (о котором рассказано ниже), перегрузив метод <code>openConnection</code> загрузчика и переопределив <code>HostnameVerifier</code>.</p>
+<h4 id="httpurlconnection">HttpUrlConnection</h4>
+<p>Если используется <code>HttpUrlConnection</code>, то рекомендуется пересмотреть подход в сторону OkHttp. Версия <code>HttpUrlConnection</code>, встроенная в Android, зафиксирована, поэтому с обновлениями могут возникнуть сложности.</p>
+<p>В документе Android «<a href="https://developer.android.com/training/articles/security-ssl.html#Pinning">Security with HTTPS and SSL</a>» предлагаемая реализация основана на pinning сертификатов с помощью собственного <strong>TrustManager</strong> и <strong>SSLSocketFactory</strong>. Однако, как и в случае с другими API, в данной рекомендации будут примеры с использованием SPKI.</p>
+<pre><code>private void validatePinning(
+        X509TrustManagerExtensions trustManagerExt,
+        HttpsURLConnection conn, Set&lt;String&gt; validPins)
+        throws SSLException {
+    String certChainMsg = "";
+    try {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        List&lt;X509Certificate&gt; trustedChain =
+                trustedChain(trustManagerExt, conn);
+        for (X509Certificate cert : trustedChain) {
+            byte[] publicKey = cert.getPublicKey().getEncoded();
+            md.update(publicKey, 0, publicKey.length);
+            String pin = Base64.encodeToString(md.digest(),
+                    Base64.NO_WRAP);
+            certChainMsg += "    sha256/" + pin + " : " +
+                    cert.getSubjectDN().toString() + "\n";
+            if (validPins.contains(pin)) {
+                return;
+            }
+        }
+    } catch (NoSuchAlgorithmException e) {
+        throw new SSLException(e);
+    }
+    throw new SSLPeerUnverifiedException("Certificate pinning " +
+            "failure\n  Peer certificate chain:\n" + certChainMsg);
+}
+private List&lt;X509Certificate&gt; trustedChain(
+        X509TrustManagerExtensions trustManagerExt,
+        HttpsURLConnection conn) throws SSLException {
+    Certificate[] serverCerts = conn.getServerCertificates();
+    X509Certificate[] untrustedCerts = Arrays.copyOf(serverCerts,
+            serverCerts.length, X509Certificate[].class);
+    String host = conn.getURL().getHost();
+    try {
+        return trustManagerExt.checkServerTrusted(untrustedCerts,
+                "RSA", host);
+    } catch (CertificateException e) {
+        throw new SSLException(e);
+    }
+}
+</code></pre>
+<p>И данная имплементация должна быть вызвана следующим образом:</p>
+<pre><code>TrustManagerFactory trustManagerFactory =
+        TrustManagerFactory.getInstance(
+                TrustManagerFactory.getDefaultAlgorithm());
+trustManagerFactory.init((KeyStore) null);
+// Find first X509TrustManager in the TrustManagerFactory
+X509TrustManager x509TrustManager = null;
+for (TrustManager trustManager : trustManagerFactory.getTrustManagers()) {
+    if (trustManager instanceof X509TrustManager) {
+        x509TrustManager = (X509TrustManager) trustManager;
+        break;
+    }
+}
+X509TrustManagerExtensions trustManagerExt =
+        new X509TrustManagerExtensions(x509TrustManager);
+...
+URL url = new URL("https://www.appmattus.com/");
+HttpsURLConnection urlConnection = 
+        (HttpsURLConnection) url.openConnection();
+urlConnection.connect();
+Set&lt;String&gt; validPins = Collections.singleton
+        ("4hw5tz+scE+TW+mlai5YipDfFWn1dqvfLG+nU7tq1V8=");
+validatePinning(trustManagerExt, urlConnection, validPins);
+</code></pre>
+<p>В данном случае вызов <code>urlConnection.connect()</code> выполняет SSL Handshake, однако не передает никаких данных, пока не будет вызван <code>urlConnection.getInputStream()</code>.</p>
+<h4 id="volley">Volley</h4>
+<p>Стандартный способ использования библиотеки Volley — это Pinning сертификатов, как показано в статье «<a href="https://medium.com/@faruktoptas/android-security-tip-public-key-pinning-with-volley-library-fb85bf761857">Android Security Tip: Public Key Pinning with Volley Library</a>». Проект Github <a href="https://github.com/faruktoptas/volley-public-key-pinning">Public Key Pinning with Android Volley library</a> показывает, как можно настраивать <strong>SSLSocketFactory</strong> для привязки к SPKI.</p>
+<p>Можно использовать альтернативный метод, в дополнение к перечисленным выше подходам. Он заключается в использовании класса <code>HostnameVerifier</code>. Этот класс используется для проверки того, что имя хоста в URL-адресе соответствует тому, что указано в сертификате.</p>
+<p>Переопределить <code>HostnameVerifier</code> можно следующим образом:</p>
+<pre><code>RequestQueue requestQueue = Volley.newRequestQueue(appContext,
+        new HurlStack() {
+    @Override
+    protected HttpURLConnection createConnection(URL url) throws IOException {
+        HttpURLConnection connection = super.createConnection(url);
+        if (connection instanceof HttpsURLConnection) {
+            HostnameVerifier delegate =
+                    urlConnection.getHostnameVerifier();
+            HostnameVerifier pinningVerifier =
+                    new PinningHostnameVerifier(delegate);
+            urlConnection.setHostnameVerifier(pinningVerifier);
+        }
+        return connection;
+    }
+});
+...
+public static class PinningHostnameVerifier
+        implements HostnameVerifier {
+    private final HostnameVerifier delegate;
+    private PinningHostnameVerifier(HostnameVerifier delegate) {
+        this.delegate = delegate;
+    }
+    @Override
+    public boolean verify(String host, SSLSession sslSession) {
+        if (delegate.verify(host, sslSession)) {
+            try {
+                validatePinning(sslSession.getPeerCertificates(),
+                        host, validPins);
+                return true;
+            } catch (SSLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+}
+</code></pre>
+<h2 id="_6">Ссылки</h2>
+<ol>
+<li>
+<p><a href="https://developer.android.com/training/articles/security-config">Network security configuration  |  Android Developers</a> </p>
+</li>
+<li>
+<p><a href="https://www.nowsecure.com/blog/2018/08/15/a-security-analysts-guide-to-network-security-configuration-in-android-p/">A Security Analyst’s Guide to Network Security Configuration in Android P</a></p>
+</li>
+<li>
+<p><a href="https://github.com/square/okhttp/wiki/HTTPS#certificate-pinning">GitHub - square/okhttp: Square’s meticulous HTTP client for the JVM, Android, and GraalVM.</a> </p>
+</li>
+<li>
+<p><a href="https://medium.com/square-corner-blog/vulnerability-in-okhttps-certificate-pinner-2a7326ad073b#.kkns7f3jk">Vulnerability in OkHttp’s Certificate Pinner</a> </p>
+</li>
+<li>
+<p><a href="https://github.com/JakeWharton/picasso2-okhttp3-downloader">GitHub - JakeWharton/picasso2-okhttp3-downloader: A OkHttp 3 downloader implementation for Picasso 2.</a></p>
+</li>
+<li>
+<p><a href="https://developer.android.com/training/articles/security-ssl.html#Pinning">Security with HTTPS and SSL  |  Android Developers</a> </p>
+</li>
+<li>
+<p><a href="https://medium.com/@faruktoptas/android-security-tip-public-key-pinning-with-volley-library-fb85bf761857">Android Security Tip: Public Key Pinning with Volley Library</a> </p>
+</li>
+<li>
+<p><a href="https://github.com/faruktoptas/volley-public-key-pinning">GitHub - faruktoptas/volley-public-key-pinning: Public key pinning with Android volley networking library</a></p>
+</li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Передача sensitive-информации во внутреннюю Activity - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#sensitive-activity" class="nav-link">Передача sensitive-информации во внутреннюю Activity</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="sensitive-activity">Передача sensitive-информации во внутреннюю Activity</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_info.png"/></td>
+        <td>Критичность:<strong> ИНФО</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> DAST, SENSITIVE INFO</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_1">Описание</h2>
+<p>Приложение включает чувствительную информацию в <strong>Intent</strong> для запуска внутренней <strong>Activity</strong>. В общем случае это не является уязвимостью, но при наличии root-доступа на устройстве такой способ передачи данных может считаться небезопасным.</p>
+<p>Межпроцессное взаимодействие (IPC) в Android осуществляться при помощи специальных объектов — <strong>Intent</strong>. Параметры обработчиков <strong>Intent</strong> задаются в основной файле манифеста приложения — <strong><em>AndroidManifest.xml</em></strong> либо, в случае с динамическими <strong>BroadcastReceivers</strong>, в коде приложения. В случае, если используется неявные <strong>Intent</strong> (не содержат имени конкретного компонента, вместо этого они в целом объявляют действие, которое требуется выполнить, что дает возможность компоненту из другого приложения обработать этот запрос, например, если требуется показать пользователю место на карте, то с помощью неявного объекта <strong>Intent</strong> можно запросить, чтобы это сделало другое приложение, в котором такая возможность предусмотрена), данные, содержащиеся в таких сообщениях, могут быть скомпрометированы. Кроме того, вредоносными приложениями могут использоваться механизмы делегирования управления процесса, такие как неявные вызовы компонентов приложений или объекты типа <strong>PendingIntent</strong>, для перехвата потока управления и фишинговых атак.</p>
+<p>Опасность представляют объекты типов <strong>Activity</strong>, <strong>Service</strong>, <strong>BroadcastReceiver</strong> и <strong>ContentProvider</strong>, открытые для взаимодействия с другими приложениями и не относящиеся к системным Android-вызовам (таким как <code>android.intent.action.MAIN</code>). <strong>BroadcastReceiver</strong> по умолчанию открыт для взаимодействия с другими приложениями, в этом случае возможен перехват <strong>Intent</strong> с конфиденциальной информацией или перехват управления.</p>
+<h2 id="_2">Рекомендации</h2>
+<p>При использовании неявных <strong>Intent</strong> (когда пользователь сам определяет, какое приложение должно обработать сообщение) <strong>нельзя</strong> включать sensitive-информацию в параметры.</p>
+<p>Риски при использовании <strong>Activity</strong> и соответствующие им защитные меры различаются в зависимости от того, как используется эта <strong>Activity</strong>. Мы выделяем 4 типа <strong>Activity</strong> в зависимости от способов использования. Для определения типа <strong>Activity</strong>, которую планируется создавать, необходимо воспользоваться таблицей и диаграммой, представленными ниже.</p>
+<figure markdown>
+![](../../img/sistema_stingrej_nebezopasnaya-peredacha-sensitive-informaczii-v-activity.png)
+</figure>
+
+<figure markdown>
+![](../../img/30eeefd4-c210-43cd-b612-f9f75e7524d3.png)
+</figure>
+
+<p><strong>Создание и использование private Activity</strong></p>
+<p><strong>Private Activity</strong> не может запускаться из других приложений и, поэтому, является наиболее защищённой.</p>
+<p>Для запуска <strong>Private Activity</strong> используется явный <strong>Intent</strong> (с указанием имени класс), поэтому нет необходимости беспокоиться о возможности непреднамеренной отправки данных в стороннее приложение. Однако, остаётся риск того, что стороннее приложение сможет получить доступ к содержимому <strong>Intent</strong>, который был использован для запуска <strong>Activity</strong>. Поэтому, если для запуска <strong>Activity</strong> используется <strong>Intent</strong>, содержащий чувствительную информацию, то важно позаботиться о мерах защиты, чтобы вредоносное приложение не смогло прочитать эту информацию.</p>
+<p><strong>Правила (создание private Activity):</strong></p>
+<ul>
+<li>Не используйте <code>taskAffinity</code>.</li>
+<li>Не используйте <code>launchMode</code>.</li>
+<li>Явно указывайте атрибут <code>exported="false"</code>.</li>
+<li>Проводите проверку и безопасную обработку полученного <strong>Intent</strong>, несмотря на то, что он был получен из того же самого приложения.</li>
+<li>В <strong>Intent</strong> результата можно включать конфиденциальную информацию, т.к. его отправка и получение происходит внутри приложения.</li>
+</ul>
+<p><strong>AndroidManifest.xml</strong></p>
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
+package="com.appsec.android.activity.privateactivity" &gt;
+&lt;application
+android:allowBackup="false"
+android:icon="@drawable/ic_launcher"
+android:label="@string/app_name" &gt;
+&lt;!-- Private activity --&gt;
+&lt;!-- *** 1 *** Не используйте taskAffinity --&gt;
+&lt;!-- *** 2 *** Не используйте launchMode --&gt;
+&lt;!-- *** 3 *** Явно указывайте атрибут exported="false" --&gt;
+&lt;activity
+android:name=".PrivateActivity"
+android:label="@string/app_name"
+android:exported="false" /&gt;
+&lt;!-- Public activity запускаемая по умолчанию --&gt;
+&lt;activity
+android:name=".PrivateUserActivity"
+android:label="@string/app_name"
+android:exported="true" &gt;
+&lt;intent-filter&gt;
+&lt;action android:name="android.intent.action.MAIN" /&gt;
+&lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+&lt;/intent-filter&gt;
+&lt;/activity&gt;
+&lt;/application&gt;
+&lt;/manifest&gt;
+</code></pre>
+<p><strong>PrivateActivity.java</strong></p>
+<pre><code>package com.appsec.android.activity.privateactivity;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+public class PrivateActivity extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.private_activity);
+
+        // *** 4 *** Проводите безопасную обработку полученного Intent, даже если он был получен из того же самого приложения
+        // См.п. "Безопасная обработка входных данных"
+
+        String param = getIntent().getStringExtra("PARAM");
+        Toast.makeText(this, String.format("Received param: %s", param), Toast.LENGTH_LONG).show();
+    }
+
+    public void onReturnResultClick(View view) {
+        // *** 5 *** В Intent результата можно включать конфиденциальную информацию, т.к. его отправка и получение происходит внутри приложения.
+        Intent intent = new Intent();
+        intent.putExtra("RESULT", "Sensitive Info");
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+}
+</code></pre>
+<p><strong>Правила (использование private Activity):</strong></p>
+<ol>
+<li>Не устанавливайте флаг <code>FLAG_ACTIVITY_NEW_TASK</code> в <strong>Intent</strong>, который будет использоваться для запуска <strong>Activity</strong>.</li>
+<li>Используйте явный <strong>Intent</strong> с указанием имени класса <strong>Activity</strong> внутри приложения.</li>
+<li>В <strong>Intent</strong>, используемый для запуска <strong>Activity</strong>, можно включать конфиденциальную информацию (но только с помощью метода <code>putExtra</code>), т.к. его отправка и получение происходит внутри приложения.</li>
+<li>Проводите проверку и безопасную обработку полученных данных результата, несмотря на то, что они были получены из <strong>Activity</strong> того же самого приложения.</li>
+</ol>
+<p><strong>PrivateUserActivity.java</strong></p>
+<pre><code>package com.appsec.android.activity.privateactivity;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+public class PrivateUserActivity extends Activity {
+
+    private static final int REQUEST_CODE = 1;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.user_activity);
+    }
+
+    public void onUseActivityClick(View view) {
+        // *** 1 *** Не устанавливайте флаг FLAG_ACTIVITY_NEW_TASK в **Intent**, который будет использоваться для запуска Activity
+        // *** 2 *** Используйте явный Intent с указанием имени класса Activity внутри приложения
+        Intent intent = new Intent(this, PrivateActivity.class);
+
+        // *** 3 *** В Intent, используемый для запуска Activity,
+        // можно включать конфиденциальную информацию но только с помощью метода `putExtra`),
+        // т.к. его отправка и получение происходит внутри приложения
+        intent.putExtra("PARAM", "Sensitive Info");
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode != RESULT_OK) return;
+
+        switch(requestCode) {
+            case REQUEST_CODE:
+                String result = data.getStringExtra("RESULT");
+
+                // *** POINT 4 *** Проводите безопасную обработку полученных данных результата,
+                // даже если они были получен из Activity того же самого приложения
+                // См.п. "Безопасная обработка входных данных"
+                Toast.makeText(this, String.format("Received result: %s, result), Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+}
+</code></pre>
+<h2 id="_3">Ссылки</h2>
+<ol>
+<li>
+<p><a href="https://developer.android.com/guide/components/intents-filters?hl=ru">https://developer.android.com/guide/components/intents-filters?hl=ru</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OWASP/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md">https://github.com/OWASP/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md</a></p>
+</li>
+<li>
+<p><a href="https://developer.android.com/training/basics/intents/index.html">https://developer.android.com/training/basics/intents/index.html</a></p>
+</li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

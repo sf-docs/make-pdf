@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Основные понятия - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Основные понятия</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Основные понятия</h1>
+<p><strong>Проект (Project)</strong> — верхнеуровневая сущность, внутри которой определяются настройки и профили сканирования для конкретного приложения. Каждый проект однозначно связывается со сканируемым приложением (пакетом) либо на этапе создания, либо при первом сканировании. На уровне проекта могут быть переопределены правила сканирования, которые будут применяться только для этого проекта. Имя проекта уникально в рамках системы.</p>
+<p><strong>Профиль (Profile)</strong> — профиль сканирования, включающий в себя настройки каждого модуля, список проверяемых стандартов и требований информационной безопасности. Имя профиля уникально в рамках проекта, к которому он относится.</p>
+<p><strong>Модуль (Module)</strong> — компоненты для сбора различной информации во время сканирования приложения на устройстве (мониторинг системного журнала, использование файлов, операции с базой данных и т. д.). Каждый модуль имеет свои уникальные настройки и может быть зависимым от результатов других модулей.</p>
+<p><strong>Тест-кейсы (Test cases)</strong> — записанный сценарий работы пользователя с приложением. Включает в себя все действия пользователя (нажатия, передаваемый текст, любые взаимодействия с интерфейсом приложения и т. д.). Тест-кейс привязывается к конкретному проекту и может быть воспроизведен только в рамках него. Тест-кейс запускается только если имя приложения (package_id) при запуске совпадает с именем приложения, для которого был записан тест-кейс.</p>
+<p><strong>Сканирование</strong> — процесс анализа, во время которого пользователь вручную или система по записанным ранее тест-кейсам взаимодействуют с приложением. Во время сканирования система Stingray собирает всю доступную информацию о работе приложения и затем проводит поиск уязвимостей и проверку на соответствие стандартам безопасности.</p>
+<p><strong>Метод сканирования/запуска</strong> — cпособ сканирования, определяющий, запускать ли записанный ранее тест-кейс или ожидать ручных операций с приложением. Возможные варианты:</p>
+<ul>
+<li><strong>Автоматический</strong> — запускает сканирование и запускает выбранный тест-кейс.</li>
+<li><strong>Ручной</strong> — после запуска сканирования необходимо вручную совершать операции с запущенным приложением.</li>
+</ul>
+<p><strong>Имя пакета (Package name)</strong> — имя пакета сканируемого приложения.</p>
+<p><strong>Правила анализа (Rules)</strong> — правила анализа, по которым происходит поиск части уязвимостей. Правила представляют собой набор строк или регулярных выражений, которые необходимо искать в собранных данных. Для удобства добавление правил оформлено в виде конструктора, в котором необходимо указать какую строку искать, в результатах каких модулей и в каком месте данных (XML-тэг, значение в JSON и т. д.).</p>
+<p><strong>Требование (Requirement)</strong> — требования информационной безопасности, на соответствие которому будет проверено приложение. С требованием соотносятся определенные типы дефектов, при нахождении которых в приложении требование будет считаться не выполненным. Требования могут быть сгруппированы в виде категорий или относиться напрямую к стандартам.</p>
+<p><strong>Категория (Category)</strong> — группировка требований информационной безопасности по различным признакам.</p>
+<p><strong>Стандарт (Standard)</strong> — совокупность требований или категорий требований информационной безопасности, на соответствие которым может проверяться приложение. Стандарты могут быть как общемировые, так и внутренние стандарты компании.</p>
+<p><strong>Дефекты (Defects)</strong> — выявленные во время сканирования дефекты приложения или, по-другому, уязвимости. У каждого дефекта есть тип, описание и рекомендации по устранению.</p>
+<p><strong>Собранные данные (Collected Data)</strong> — вся собранная информация о работе приложения за время сканирования. Данные разделены по модулям, каждый из которых отвечает за сбор определенной информации. Эти данные так же можно скачать и проанализировать локально, при желании.</p>
+<p><strong>CI/CD (Continuous Integration / Continuous Delivery)</strong> — системы для непрерывной интеграции и непрерывных поставок приложения. Примерами таких систем могут быть Jenkins, Teamcity, GitLab CI.</p>
+<p><strong>Эмулятор (Emulator)</strong> — виртуальный эмулятор имитирующее реальное устройство Android. Характеризуется различной архитектурой и версией операционной системы.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

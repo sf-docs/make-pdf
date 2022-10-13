@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Приложение 1. Список модулей для сбора информации - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#1" class="nav-link">Приложение 1. Список модулей для сбора информации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="1">Приложение 1. Список модулей для сбора информации</h1>
+<p>Система включает более двадцати модулей для сканирования и сбора информации о приложении. Каждый из модулей отвечает за сбор «своей» информации. Список всех модулей представлен на вкладке <strong>Модули</strong> на странице <strong>Профиль</strong>. Из этого списка можно выбрать и настроить те модули, которые будут включены при сканировании приложения с этим профилем.</p>
+<p>Модули собирают следующую информацию:</p>
+<ul>
+<li><strong>Базы данных</strong> — модуль для сбора и анализа баз данных, которые используются в приложении (включая зашифрованные базы данных).</li>
+<li><strong>Файлы приложения</strong> — модуль для сбора и анализа файлов, которые сохраняет приложение в своей директории (во внутреннем или внешнем хранилище) во время своей работы. Настройки модуля позволяют исключить из списка отдельные файлы и директории.</li>
+<li><strong>Дамп памяти приложения</strong> — модуль получения и анализа дампа памяти (heapdump) приложения.</li>
+<li><strong>Информация о ключах</strong> — модуль для анализа безопасности хранилищ, в которых сохраняются ключи шифрования</li>
+<li><strong>Записи системного журнала</strong> — модуль для мониторинга сообщений, который приложение записывает в системный журнал.</li>
+<li><strong>Отслеживание Activity</strong> — модуль для мониторинга Activity, которые запускаются во время работы с приложением. Помимо отслеживания факта запуска Activity модуль также сохраняет и анализирует Intent и его содержимое.</li>
+<li><strong>Отслеживание Broadcast Receiver</strong> — модуль для мониторинга использования и регистрации BroadcastReceiver во время работы приложения. Помимо отслеживания факта использования BroadcastReceiver, модуль также сохраняет и анализирует используемый Intent и его содержимое.</li>
+<li><strong>Отслеживание Broadcast</strong> — модуль для мониторинга Broadcast сообщений, которые обрабатываеются в приложении.</li>
+<li><strong>Отслеживание Intent</strong> — модуль для мониторинга Intent, которые используются и обрабатываются во время работы приложения.</li>
+<li><strong>Отслеживание Service</strong> — модуль для мониторинга операций с Services, которые запускает или использует приложение во время работы.</li>
+<li><strong>Работа с SharedPreferences</strong> — модуль для мониторинга операций, связанных с изменением содержимого Shared Preferences.</li>
+<li><strong>Сетевая активность</strong> — модуль, предназначенный для перехвата и анализа сетевого взаимодействия приложения с сервером.</li>
+<li><strong>Содержимое SharedPreferences</strong> — модуль, предоставляющий информацию о содержимом Shared Prefences на момент окончания сканирования.</li>
+<li><strong>Работа с SQLite</strong> — модуль для отслеживания запросов к базам данных. Обрабатываются как запросы к базам даннах, так и полученный результат выполнения запроса.</li>
+<li><strong>Используемые файлы</strong> — модуль для сбора и анализа файлов, которые приложение использует во время своей работы. Это могут быть, как файлы внутри директории приложения, так и любые другие файлы в системе.</li>
+<li><strong>SAST</strong> — модуль для статического анализа исходного кода приложения и содержимого сборки.</li>
+<li><strong>Поиск ранее найденной чувствительной информации</strong> — модуль для поиска чувствительной информации, найденной ранее в других модулях. Например, если была найдена чувствительная информация «session_id=111222333444555», то будет произведен поиск значения «111222333444555» во всех ранее собранных данных, но уже без привязки к имени параметра «session_id».</li>
+<li><strong>Интеграция с AppScreener</strong> — модуль для интеграции с системой статического анализа <a href="https://rt-solar.ru/products/solar_appscreener/capabilities/">Solar AppScreener</a>. </li>
+<li><strong>Интеграция с Oversecured</strong> — модуль для интеграции c системой статического анализа <a href="https://oversecured.com/">Oversecured</a>.</li>
+<li><strong>Построения графа вызовов (taint-анализ)</strong> — модуль для построения графа вызовов методов, которые потенциально могут использоваться в построении tainted flow. Этот модуль позволяет отследить распространение непроверенных внешних данных по программе в процессе ее работы. Если такие данные попадают в ключевые точки кода, то такая ситуация может привести к появлению различных уязвимостей, включая SQL-инъекции, межсайтовый скриптинг (XSS) и другие.</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

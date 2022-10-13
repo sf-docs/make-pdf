@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Передача sensitive-информации в Private BroadcastReceiver - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#sensitive-private-broadcastreceiver" class="nav-link">Передача sensitive-информации в Private BroadcastReceiver</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="sensitive-private-broadcastreceiver">Передача sensitive-информации в Private BroadcastReceiver</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_info.png"/></td>
+        <td>Критичность:<strong> ИНФО</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> DAST, SENSITIVE INFO</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_1">Описание</h2>
+<p>Приложение включает чувствительную информацию в <strong>Intent</strong> для запуска приватного <strong>BroadcastReceiver</strong>. </p>
+<p>Межпроцессное взаимодействие (IPC) в Android осуществляется при помощи специальных объектов — <strong>Intent</strong>. Параметры обработчиков <strong>Intent</strong> задаются в основном файле манифеста приложения — <strong><em>AndroidManifest.xml</em></strong> либо, в случае с динамическими <strong>BroadcastReceivers</strong> — в коде приложения. Если используются неявные <strong>Intent</strong> (адресат сообщения не указан явно либо применяется механизм широковещательных сообщений — <strong>Broadcast</strong>), данные, содержащиеся в таких сообщениях, могут быть скомпрометированы. Кроме того, вредоносными приложениями могут использоваться механизмы делегирования управления процесса, такие как неявные вызовы компонентов приложений или объекты типа <strong>PendingIntent</strong> для перехвата потока управления и фишинговых атак.</p>
+<p>Опасность представляют объекты типов <strong>Activity</strong>, <strong>Service</strong>, <strong>BroadcastReceiver</strong> и <strong>ContentProvider</strong>, открытые для взаимодействия с другими приложениями и не относящиеся к системным Android-вызовам (таким как <code>android.intent.action.MAIN</code>). По умолчанию <strong>BroadcastReceiver</strong> открыт для взаимодействия с другими приложениями, в этом случае возможен перехват <strong>Intent</strong> с конфиденциальной информацией или перехват управления.</p>
+<h2 id="_2">Рекомендации</h2>
+<p>При отправке <strong>Broadcast</strong> с чувствительной информацией во внутренний <strong>BroadcastReceiver</strong> должен использоваться явный <strong>Intent</strong>, <strong>Private BroadcastReceiver</strong> или LocalBroadcastManager. Также следует помнить, что приложение <strong>не должно</strong> включать чувствительную информацию в <strong>Public Broadcast</strong>.</p>
+<p>Для получения <strong>Broadcast</strong> необходимо создать <strong>BroadcastReceiver</strong>. Риски при использовании <strong>BroadcastReceiver</strong> и соответствующие им защитные меры различаются в зависимости от типа <strong>Broadcast</strong>.</p>
+<p>Для определения типа <strong>BroadcastReceiver</strong>, который планируется создавать, можно воспользоваться таблицей и диаграммой, представленными ниже. У приложения, получающего <strong>Broadcast</strong>, нет возможности проверить имя пакета, из которого произошла его отправка, поэтому невозможно создать <strong>Partner BroadcastReceiver</strong> <a href="">по аналогии с Activity</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Тип BroadcastReceiver</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Private BroadcastReceiver</td>
+<td>BroadcastReceiver, который не может получать Broadcast из других приложений, и поэтому является наиболее защищённым</td>
+</tr>
+<tr>
+<td>Public BroadcastReceiver</td>
+<td>BroadcastReceiver, который может получать Broadcast из любых приложений</td>
+</tr>
+<tr>
+<td>In-house BroadcastReceiver</td>
+<td>BroadcastReceiver, который может получать Broadcast только из приложений того же разработчика</td>
+</tr>
+</tbody>
+</table>
+<figure markdown>
+![](../../img/6e080da3-1d5c-4a48-918d-505e4e4076ca.png)
+</figure>
+
+<p>Также в зависимости от способа объявления <strong>BroadcastReceiver</strong> может быть статическим или динамическим.</p>
+<table>
+<thead>
+<tr>
+<th>—</th>
+<th>Способ объявления</th>
+<th>Характеристики</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Статический <strong>BroadcastReceiver</strong></td>
+<td>С помощью элементов \&lt;receiver&gt; в файле <strong><em>AndroidManifest.xml</em></strong> – не может получать некоторые системные Broadcast'ы (например, <code>ACTION_BATTERY_CHANGE</code>);<br>– будет получать Broadcast'ы, начиная с момента установки приложения и до его удаления</td>
+<td></td>
+</tr>
+<tr>
+<td>Динамический <strong>BroadcastReceiver</strong></td>
+<td>С помощью вызова метода registerReceiver()</td>
+<td>– может получать все Broadcast'ы, которые не может получать статический <strong>BroadcastReceiver</strong>;<br>– период получения <strong>Broadcast</strong>'ов определяется логикой программы;<br>– не может быть создан <strong>Private BroadcastReceiver</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Пример создания Private BroadcastReceiver</strong></p>
+<p><strong>Private BroadcastReceiver</strong> является наиболее безопасным, т. к. он получит <strong>Broadcast</strong> только из того же самого приложения, в котором был объявлен. <strong>Private BroadcastReceiver</strong> может быть объявлен только статически.</p>
+<p>Правила (получение <strong>Broadcast</strong>):</p>
+<ol>
+<li>Явно указывайте атрибут <code>exported="false"</code>.</li>
+<li>Проводите проверку и безопасную обработку полученного <strong>Intent</strong>, несмотря на то, что он был получен из того же самого приложения.</li>
+<li>В <strong>Intent</strong> результата можно включать конфиденциальную информацию, т.к. его отправка и получение происходят внутри приложения.</li>
+</ol>
+<p><strong>Объявление компонента в AndroidManifest.xml</strong></p>
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+    &lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.appsec.android.broadcast.privatereceiver" &gt;
+    &lt;application
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:allowBackup="false" &gt;
+
+            &lt;!-- Private Broadcast Receiver --&gt;
+            &lt;!-- *** 1 *** Явно указывайте атрибут exported="false" --&gt;
+            &lt;receiver
+                android:name=".PrivateReceiver"
+                android:exported="false" /&gt;
+
+            &lt;activity
+                android:name=".PrivateSenderActivity"
+                android:label="@string/app_name"
+                android:exported="true" &gt;
+                &lt;intent-filter&gt;
+                    &lt;action android:name="android.intent.action.MAIN" /&gt;
+                    &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+                &lt;/intent-filter&gt;
+            &lt;/activity&gt;
+        &lt;/application&gt;
+    &lt;/manifest&gt;
+</code></pre>
+<p><strong>Получение Broadcast</strong></p>
+<pre><code>package com.appsec.android.broadcast.privatereceiver;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+public class PrivateReceiver extends BroadcastReceiver {     @Override
+    public void onReceive(Context context, Intent intent) {
+
+        // *** 2 *** Проводите проверку и безопасную обработку полученного Intent, несмотря на то, что он был получен из того же самого приложения         String param = intent.getStringExtra("PARAM");
+        Toast.makeText(context,
+                String.format("Received param: \"%s\"", param),
+                Toast.LENGTH_SHORT).show();
+
+        // *** 3 *** В Intent результата можно включать конфиденциальную информацию, т.к. его отправка и получение происходит внутри приложения
+        setResultCode(Activity.RESULT_OK);
+        setResultData("Чувствительная информация");
+        abortBroadcast();
+    }
+}
+</code></pre>
+<p><strong>Правила (отправка Broadcast):</strong></p>
+<ol>
+<li>Используйте явный <strong>Intent</strong> с указанием имени класса <strong>BroadcastReceiver</strong> внутри приложения.</li>
+<li>Можно отправлять чувствительную информацию.</li>
+<li>Проводите проверку и безопасную обработку полученных данных результата, несмотря на то, что они были получены из <strong>BroadcastReceiver</strong> того же самого приложения.<pre><code>package com.appsec.android.broadcast.privatereceiver;
+    import android.app.Activity;
+    import android.content.BroadcastReceiver;
+    import android.content.Context;
+    import android.content.Intent;
+    import android.os.Bundle;
+    import android.view.View;
+    import android.widget.TextView;
+    public class PrivateSenderActivity extends Activity {
+    public void onSendNormalClick(View view) {
+            // *** 1 *** Используйте явный Intent с указанием имени класса BroadcastReceiver внутри приложения
+            Intent intent = new Intent(this, PrivateReceiver.class);
+        // *** 2 *** Можно отправлять чувствительную информацию
+            intent.putExtra("PARAM", "Чувствительная информация от отправителя");
+            sendBroadcast(intent);
+        }
+
+        public void onSendOrderedClick(View view) {
+            // *** 1 *** Используйте явный Intent с указанием имени класса BroadcastReceiver внутри приложения
+            Intent intent = new Intent(this, PrivateReceiver.class);
+        // *** 2 *** Можно отправлять чувствительную информацию
+            intent.putExtra("PARAM", "Чувствительная информация от отправителя");
+            sendOrderedBroadcast(intent, null, mResultReceiver, null, 0, null, null);
+        }
+
+        private BroadcastReceiver mResultReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // *** 3 *** Проводите проверку и безопасную обработку полученных данных результата, несмотря на то, что они были получены из BroadcastReceiver того же самого приложения
+                // См.п. "Безопасная обработка входных данных"
+
+                String data = getResultData();
+                PrivateSenderActivity.this.logLine(
+                        String.format("Received result: \"%s\"", data));
+            }
+        };
+
+        private TextView mLogView;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.main);
+            mLogView = (TextView)findViewById(R.id.logview);
+        }
+
+        private void logLine(String line) {
+            mLogView.append(line);
+            mLogView.append("\n");
+        }
+    }
+</code></pre>
+</li>
+</ol>
+<h2 id="_3">Ссылки</h2>
+<ol>
+<li><a href="https://developer.android.com/guide/components/intents-filters.html">Intents and Intent Filters  |  Android Developers</a></li>
+<li><a href="https://developer.android.com/training/basics/intents/index.html">Interacting with Other Apps  |  Android Developers</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/927.html">CWE - CWE-927: Use of Implicit Intent for Sensitive Communication (4.6)</a></li>
+<li><a href="https://github.com/OWASP/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md#testing-for-injection-flaws-mstg-platform-2">owasp-mstg/0x05h-Testing-Platform-Interaction.md at master · OWASP/owasp-mstg</a></li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

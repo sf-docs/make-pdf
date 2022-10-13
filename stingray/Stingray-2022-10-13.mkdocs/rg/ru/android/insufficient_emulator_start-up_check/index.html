@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Недостаточная проверка на запуск на эмуляторе - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Недостаточная проверка на запуск на эмуляторе</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Недостаточная проверка на запуск на эмуляторе</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_srednij.png"/></td>
+        <td>Критичность:<strong> СРЕДНЯЯ</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> IAST</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_2">Описание</h2>
+<p>Запуск и работа приложений в ОС без проверки окружения может нести значительные риски.</p>
+<p>Злоумышленник или легальный пользователь могут запускать приложение на эмуляторе с целью создания фейковых аккаунтов, накруток различных показателей, исследования взаимодействия приложения с ОС и другими приложениями, а также исследования взаимодействия приложения по сети, в том числе с серверной частью (исследование API). Установка и работа в таком окружении значительно снижает безопасность данных пользователя и потенциально увеличивает риск финансовых и репутационных потерь для поставщика приложения.</p>
+<p>Использование эмулятора зачастую противоречит политике и целям производителя приложения. В некоторых случаях установка на эмулятор производится с целью получения прямой выгоды пользователем или преимущества перед другими пользователями. Кроме того, исследование и использование приложений злоумышленниками в большинстве случаев производится также на эмуляторах.</p>
+<p><strong>Слабой или недостаточной проверкой на запуск на эмуляторе является использование менее двух проверок разного типа</strong>. </p>
+<p><strong>Стандартная проверка на эмулятор:</strong></p>
+<ul>
+<li>
+<p>SystemProperties;</p>
+</li>
+<li>
+<p>BuildProperites;</p>
+</li>
+<li>
+<p>наличие пакетов, сопутствующих эмуляторам (<code>"com.bluestacks"</code>, <code>"com.google.android.launcher.layouts.genymotion"</code> и т. д.);</p>
+</li>
+<li>
+<p>наличие файлов, сопутствующих эмуляторам (<code>ueventd.ttVM_x86.rc</code>, <code>fstab.andy</code> и т. п.);</p>
+</li>
+<li>
+<p>проверка мобильного оператора на значение <code>"Android"</code>;</p>
+</li>
+<li>
+<p>проверка телефонии на наличие известных фейковых значений (проверка номера телефона, проверка <code>DEVICE_ID</code>).</p>
+<p>!!! note "Примечание"
+    Проверкой одного типа называется проверка, использующая один из методов API. При этом сама проверка может быть использована многократно с разными входными данными. Яркий пример — использование метода <code>File.exist()</code> для проверки наличия в файловой системе некоторого перечня файлов. Другой пример — использование статических полей класса <code>Build</code> для проверки на эмулятор. Данный класс содержит множество полей, однако их использование относится к одному и тому же типу проверок.</p>
+</li>
+</ul>
+<h2 id="_3">Рекомендации</h2>
+<p>Приложение при запуске и во время работы должно проверять косвенные и непосредственные значения параметров ОС, указывающие на наличие прав root и эмулятора.</p>
+<p><strong>Определение эмулятора:</strong></p>
+<ul>
+<li>
+<p>Поиск файлов, характерных для различных эмуляторов: <code>"ueventd.android_x86.rc"</code>, <code>"x86.prop"</code>, <code>"ueventd.ttVM_x86.rc"</code>, <code>"init.ttVM_x86.rc"</code>, <code>"fstab.ttVM_x86"</code>, <code>"fstab.vbox86"</code>, <code>"init.vbox86.rc"</code>, <code>"ueventd.vbox86.rc"</code>, <code>"/dev/socket/qemud"</code>, <code>"qemud"</code>, <code>"/dev/qemu_pipe"</code>, <code>"qemu_pipe"</code>, <code>"/system/lib/libc_malloc_debug_qemu.so"</code>, <code>"libc_malloc_debug_qemu.so"</code>, <code>"/sys/qemu_trace"</code>, <code>"/system/bin/qemu-props"</code>, <code>"qemu_trace"</code>, <code>"qemu-props"</code>, <code>"/dev/socket/genyd"</code>, <code>"genyd"</code>, <code>"/dev/socket/baseband_genyd"</code>, <code>"baseband_genyd"</code>, <code>"/proc/tty/drivers"</code>, <code>"drivers"</code>, <code>"/proc/cpuinfo"</code>, <code>"cpuinfo"</code>, <code>"/dev/goldfish_pipe"</code>, <code>"goldfish_pipe"</code>.</p>
+</li>
+<li>
+<p>Проверка системных свойств: <code>"init.svc.qemud"</code>, <code>"init.svc.qemu-props"</code>, <code>"qemu.hw.mainkeys"</code>, <code>"qemu.sf.fake_camera"</code>, <code>"qemu.sf.lcd_density"</code>, <code>"ro.bootloader"</code>, <code>"ro.bootmode"</code>, <code>"ro.hardware"</code>, <code>"ro.kernel.android.qemud"</code>,<code>"ro.kernel.qemu.gles"</code>, <code>"ro.kernel.qemu"</code>, <code>"ro.product.device"</code>, <code>"ro.product.model"</code>, <code>"ro.product.name"</code>, <code>"ro.serialno"</code>, <code>"ro.build.display.id"</code>, <code>"ro.product.cpu.abi"</code>, <code>"ro.debuggable"</code>, <code>"ro.secure"</code>.</p>
+</li>
+<li>
+<p>Проверка полей класса <code>Build</code>: <code>"FINGERPRINT"</code>, <code>"MODEL"</code>, <code>"MANUFACTURER"</code>, <code>"BRAND"</code>, <code>"BOARD"</code>, <code>"ID"</code>, <code>"SERIAL"</code>, <code>"TAGS"</code>, <code>"USER"</code>, <code>"HARDWARE"</code>,<code>"PRODUCT"</code>, <code>"TYPE"</code>.</p>
+<p><strong>Пример кода:</strong></p>
+<pre><code>public static boolean isEmulator() {
+    return (Build.BRAND.startsWith("generic") &amp;&amp; Build.DEVICE.startsWith("generic")
+            || Build.FINGERPRINT.startsWith("generic")
+            || Build.FINGERPRINT.startsWith("unknown")
+            || Build.HARDWARE.contains("goldfish")
+            || Build.HARDWARE.contains("ranchu")
+            || Build.MODEL.contains("google_sdk")
+            || Build.MODEL.contains("Emulator")
+            || Build.MODEL.contains("Android SDK built for x86")
+            || Build.MANUFACTURER.contains("Genymotion")
+            || Build.PRODUCT.contains("sdk_google")
+            || Build.PRODUCT.contains("google_sdk")
+            || Build.PRODUCT.contains("sdk")
+            || Build.PRODUCT.contains("sdk_x86")
+            || Build.PRODUCT.contains("vbox86p")
+            || Build.PRODUCT.contains("emulator")
+            || Build.PRODUCT.contains("simulator"));
+}
+</code></pre>
+</li>
+<li>
+<p>Проверка телефонии: телефонный номер в списке известных фейковых номеров, <code>device_id</code> в списке известных фейковых <code>device_id</code> и т. п.
+пример кода:</p>
+<pre><code>static final String[] DEVICE_IDS = {
+        "000000000000000",
+        "e21833235b6eef10",
+        "012345678912345"
+    };
+    boolean checkDeviceId() {
+        TelephonyManager telephonyManager =
+            (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+
+        @SuppressLint("HardwareIds") String deviceId = telephonyManager.getDeviceId();
+        for (String known_deviceId : DEVICE_IDS) {
+            if (known_deviceId.equalsIgnoreCase(deviceId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+</code></pre>
+</li>
+</ul>
+<h2 id="_4">Ссылки</h2>
+<ol>
+<li>
+<p><a href="https://github.com/framgia/android-emulator-detector">GitHub - framgia/android-emulator-detector: Easy to detect android emulator</a></p>
+</li>
+<li>
+<p><a href="https://ray-chong.medium.com/android-emulator-detection-4d0f994aab5e">Android Emulator Detection</a></p>
+</li>
+<li>
+<p><a href="https://danielllewellyn.medium.com/emulator-detection-in-android-350efba44048">Emulator detection in Android</a></p>
+</li>
+<li>
+<p><a href="https://versprite.com/blog/application-security/android-emulator-detection/">Android Emulator Detection | VerSprite</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OWASP/owasp-mstg/blob/master/Document/0x05b-Basic-Security_Testing.md">owasp-mstg/0x05b-Basic-Security_Testing.md at master · OWASP/owasp-mstg</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OWASP/owasp-mstg/blob/master/Document/0x05j-Testing-Resiliency-Against-Reverse-Engineering.md">owasp-mstg/0x05j-Testing-Resiliency-Against-Reverse-Engineering.md at master · OWASP/owasp-mstg</a></p>
+</li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

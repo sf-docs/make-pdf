@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Хранение sensitive-информации в приватном файле вне директории приложения - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#sensitive-" class="nav-link">Хранение sensitive-информации в приватном файле вне директории приложения</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="sensitive-">Хранение sensitive-информации в приватном файле вне директории приложения</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_info.png"/></td>
+        <td>Критичность:<strong> ИНФО</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> DAST, FILES</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_1">Описание</h2>
+<p>Приложение хранит чувствительную информацию в приватном файле вне директории приложения.</p>
+<p>Для того, чтобы понять, какие именно данные необходимо защищать, прежде всего необходимо определить, какие данные обрабатывает и хранит приложение и какая часть из этой информации считается конфиденциальной. Как правило, в таких случаях полагаются на законодательство и здравый смысл. Нет смысла защищать шифрованием абсолютно всю информацию, которое хранит приложение, это может повлиять на скорость и стабильность работы. Вместо этого следует однозначно определить, что именно является для вашего приложения или компаниями конфиденциальными данными и сосредоточить свое внимание именно на этих данных.</p>
+<p>Принято считать, что необходимо хранить как можно меньше конфиденциальных данных в локальном хранилище (внутреннем или внешнем). Однако в большинстве случаев, хранения такой информации не удастся избежать. Например, не стоит заставлять пользователя вводить сложный пароль при каждом запуске приложения с точки зрения удобства использования. Большинство приложений должны локально кэшировать какой-либо токен аутентификации. Персонально идентифицируемая информация (PII) и другие типы конфиденциальных данных также могут быть сохранены, если этого требует конкретный сценарий.</p>
+<p>Приложение может хранить данные в нескольких местах, например, на устройстве или на внешней SD-карте. Наиболее широко используемые способы хранения данных на устройстве:</p>
+<ul>
+<li>Shared Preferences.</li>
+<li>Базы данных SQLite.</li>
+<li>Базы данных Realm.</li>
+<li>Внутренняя память.</li>
+<li>Внешнее хранилище.</li>
+</ul>
+<p>Не стоит забывать, что использование любого из этих способов не гарантирует безопасность хранимых данных. Если дополнительно перед этим не использовать шифрование или хэширование, то эти данные смогут быть доступны злоумышленнику.</p>
+<p>!!! note "Внимание!"
+    Очень часто ошибочно считается, что данные, которые хранятся во внутренней директории приложения уже защищены при помощи механизма песочницы и злоумышленник до них не доберется. Существует большое количество способов, начиная от простого локального или облачного backup приложения, заканчивая физическим доступом к устройству и эксплуатации различных уязвимостей. <strong>Информация, размещенная в открытом виде внутри директории приложения, не защищена!</strong></p>
+<p>Размещение же информации на внешнем носителе или в общих директориях делает ее доступной для всех. И в таких файлах точно не стоит хранить конфиденциальную информацию.</p>
+<h2 id="_2">Рекомендации</h2>
+<p>Способ хранения конфиденциальной информации зависит от её типа. В случае с необходимостью хранения ключей шифрования — лучше всего использовать системное хранилище, AndroidKeyStore, но, к сожалению, это не всегда возможно, так что необходимо исходить из максимально допустимой защиты в зависимости от версии Android:</p>
+<ul>
+<li>На Android API&lt;18 ключи шифрования должны храниться внутри директории приложения в BKS.</li>
+<li>На Android API&gt;=18 RSA ключи должны храниться в AndroidKeyStore, AES ключи в BKS.</li>
+<li>На Android API&gt;=23 RSA и AES ключи должны храниться в AndroidKeyStore.</li>
+</ul>
+<p>Не стоит забывать, что при использовании BKS во внутренней директории приложения необходимо дополнительно защищать его и хранящиеся в нем ключи с помощью надежного пароля. Как один из вариантов, сгенерированный пароль должен быть проверен в базе наиболее популярных паролей и должен соответствовать минимальным требованиям:</p>
+<ul>
+<li>Длина пароля не меньше 20 символов.</li>
+<li>Обязательно содержание хотя бы одной прописной буквы.</li>
+<li>Обязательно содержание хотя бы одной заглавной буквы.</li>
+<li>Обязательно содержание хотя бы одной цифры.</li>
+<li>Обязательно содержание хотя бы одного спец символа.</li>
+</ul>
+<p>Для обеспечения конфиденциальности и проверки целостности данных Android оснащена множеством криптографических функций. Методы, с помощью которых приложения Android могут безопасно осуществлять шифрование и дешифрование (для обеспечения конфиденциальности), а также аутентификацию сообщений (MAC) и цифровые подписи (для проверки целостности).</p>
+<p>Для того, чтобы выбрать подходящий в заданных условиях метод шифрования и тип ключа, можно воспользоваться следующими схемами:</p>
+<figure markdown>
+![](../../img/6.png)
+</figure>
+
+<figure markdown>
+![](../../img/7.png)
+</figure>
+
+<p><strong>Шифрование/дешифрование ключом на основе пароля</strong></p>
+<p>Для примера рассмотрим шифрование/дешифрование ключом на основе пароля пользователя. В этом случае нет необходимости в хранении ключа шифрования, так как он генерируется “на лету“ с использованием пароля, который ввел пользователь:</p>
+<p>Правила:</p>
+<ol>
+<li>Явно определяйте режим шифрования и дополнения блоков.</li>
+<li>Используйте криптостойкие технологии шифрования, включающие алгоритм, режим блочного шифрования и режим дополнения блоков.</li>
+<li>В процессе генерации ключа на основе пароля используйте «соль» (salt).</li>
+<li>В процессе генерации ключа на основе пароля используйте достаточное количество итераций хеширования.</li>
+<li>Используйте ключ с длиной, которая обеспечит криптостойкость шифрования.<pre><code>package com.appsec.android.cryptsymmetricpasswordbasedkey;
+
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+
+public final class AesCryptoPBEKey {
+
+    // *** 1 *** Явно определяйте режим шифрования и дополнения блоков.
+    // *** 2 *** Используйте криптостойкие технологии шифрования, включающие алгоритм, режим блочного шифрования и режим дополнения блоков
+    // Параметры передаваемые в метод getInstance класса Cipher: алгоритм шифрования, режим блочного шифрования, режим дополнения блоков
+    // в этом примере следующие значения: алгоритм шифрования=AES, режим блочного шифрования=CBC, режим дополнения блоков=PKCS7Padding
+    private static final String TRANSFORMATION = "AES/CBC/PKCS7Padding";
+
+    // Строка, используемая для получения экземпляра класса, который будет генерировать ключ
+    private static final String KEY_GENERATOR_MODE = "PBEWITHSHA256AND128BITAES-CBC-BC";
+
+    // *** 3 *** В процессе генерации ключа на основе пароля используйте "соль" (salt)
+    // Длина строки "соли" в байтах
+    public static final int SALT_LENGTH_BYTES = 20;
+
+    // *** 4 *** В процессе генерации ключа на основе пароля используйте достаточное количество итераций хеширования
+    // Указание числа повторений смешиваний, используемых при генерации ключей с помощью PBE
+    private static final int KEY_GEN_ITERATION_COUNT = 1024;
+
+    // *** 5 *** Используйте ключ с длиной, которая обеспечит криптостойкость шифрования
+    // Длина ключа в битах
+    private static final int KEY_LENGTH_BITS = 128;
+
+    private byte[] mIV = null;
+    private byte[] mSalt = null;
+
+    public byte[] getIV() {
+        return mIV;
+    }
+
+    public byte[] getSalt() {
+        return mSalt;
+    }
+
+    AesCryptoPBEKey(final byte[] iv, final byte[] salt) {
+        mIV = iv;
+        mSalt = salt;
+    }
+
+    AesCryptoPBEKey() {
+        mIV = null;
+        initSalt();
+    }
+
+    private void initSalt() {
+        mSalt = new byte[SALT_LENGTH_BYTES];
+        SecureRandom sr = new SecureRandom();
+        sr.nextBytes(mSalt);
+    }
+
+    public final byte[] encrypt(final byte[] plain, final char[] password) {
+        byte[] encrypted = null;
+
+        try {
+            // *** 1 *** Явно определяйте режим шифрования и дополнения блоков.
+            // *** 2 *** Используйте криптостойкие технологии шифрования, включающие алгоритм, режим блочного шифрования и режим дополнения блоков
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+
+            // *** 3 *** В процессе генерации ключа на основе пароля используйте "соль" (salt)
+            SecretKey secretKey = generateKey(password, mSalt);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            mIV = cipher.getIV();
+
+            encrypted = cipher.doFinal(plain);
+        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchPaddingException e) {
+        } catch (InvalidKeyException e) {
+        } catch (IllegalBlockSizeException e) {
+        } catch (BadPaddingException e) {
+        } finally {
+        }
+
+        return encrypted;
+    }
+
+    public final byte[] decrypt(final byte[] encrypted, final char[] password) {
+        byte[] plain = null;
+
+        try {
+            // *** 1 *** Явно определяйте режим шифрования и дополнения блоков.
+            // *** 2 *** Используйте криптостойкие технологии шифрования, включающие алгоритм, режим блочного шифрования и режим дополнения блоков
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+
+            // *** 3 *** В процессе генерации ключа на основе пароля используйте "соль" (salt)
+            SecretKey secretKey = generateKey(password, mSalt);
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(mIV);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+
+            plain = cipher.doFinal(encrypted);
+        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchPaddingException e) {
+        } catch (InvalidKeyException e) {
+        } catch (InvalidAlgorithmParameterException e) {
+        } catch (IllegalBlockSizeException e) {
+        } catch (BadPaddingException e) {
+        } finally {
+        }
+
+        return plain;
+    }
+
+    private static final SecretKey generateKey(final char[] password, final byte[] salt) {
+        SecretKey secretKey = null;
+        PBEKeySpec keySpec = null;
+
+        try {
+            // *** 2 *** Используйте криптостойкие технологии шифрования, включающие алгоритм, режим блочного шифрования и режим дополнения блоков
+            // Получение экземпляра класса для генерации ключа
+            // В этом примере используется класс KeyFactory, который применяет алгоритм SHA256 для генерации AES-CBC 128-битного ключа
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(KEY_GENERATOR_MODE);
+
+            // *** 3 *** В процессе генерации ключа на основе пароля используйте "соль" (salt)
+            // *** 4 *** В процессе генерации ключа на основе пароля используйте достаточное количество итераций хеширования
+            // *** 5 *** Используйте ключ с длиной, которая обеспечит криптостойкость шифрования
+            keySpec = new PBEKeySpec(password, salt, KEY_GEN_ITERATION_COUNT, KEY_LENGTH_BITS);
+            // Очистка пароля - требуется для усложнения процедуры отладки и невключения пароля в дамп памяти
+            Arrays.fill(password, '?');
+            // Генерация ключа
+            secretKey = secretKeyFactory.generateSecret(keySpec);
+        } catch (NoSuchAlgorithmException e) {
+        } catch (InvalidKeySpecException e) {
+        } finally {
+            keySpec.clearPassword();
+        }
+
+        return secretKey;
+    }
+}
+</code></pre>
+</li>
+</ol>
+<h2 id="_3">Ссылки</h2>
+<ol>
+<li>
+<p><a href="https://mobile-security.gitbook.io/mobile-security-testing-guide/android-testing-guide/0x05d-testing-data-storage">https://mobile-security.gitbook.io/mobile-security-testing-guide/android-testing-guide/0x05d-testing-data-storage</a></p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/200.html">https://cwe.mitre.org/data/definitions/200.html</a></p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/311.html">https://cwe.mitre.org/data/definitions/311.html</a></p>
+</li>
+<li>
+<p><a href="https://cwe.mitre.org/data/definitions/312.html">https://cwe.mitre.org/data/definitions/312.html</a></p>
+</li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

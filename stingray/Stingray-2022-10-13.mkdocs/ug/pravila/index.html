@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Правила - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Правила</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Переопределение правил анализа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Описание работы правил анализа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Редактирование правил анализа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_5" class="nav-link">Добавление правил анализа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_6" class="nav-link">Удаление правил анализа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Правила</h1>
+<p>На данной вкладке представлены правила анализа уязвимостей, которые применяются для выбранного проекта. В общем случае правила соответствуют определенным на уровне компании (см. раздел «<a href="../../ag/pravila_analiza_na_urovne_organizacii/">Правила анализа на уровне Компании</a>»), но есть возможность изменить или добавить правила в соответствии со спецификой сканируемого приложения. Необходимо отметить, что правила, добавленные непосредственно в проекте, будут применяться только в рамках этого проекта.</p>
+<figure markdown>
+![](img/93.png)
+</figure>
+
+<h2 id="_2">Переопределение правил анализа</h2>
+<p>На странице проекта на вкладке <strong>Правила</strong> представлены правила анализа собранных данных для поиска уязвимостей. На этой вкладке возможно добавить, изменить, отключить или удалить существующее правило анализа для конкретного проекта. То есть, заданное на этой вкладке новое или измененное правило будет применяться в рамках только этого проекта, а не для всех проектов данной компании.</p>
+<h2 id="_3">Описание работы правил анализа</h2>
+<p>Основная цель применения правил анализа — модификация системы под особенности своего приложения для эффективной работы по поиску уязвимостей. Каждое приложение и его данные уникальны по формату и содержанию. Применение  правил анализа, настроенных под специфику проекта, позволяет максимально увеличить покрытие системой всех возможностей для поиска уязвимостей для каждого конкретного приложения.</p>
+<p>Правила анализа, по которым происходит поиск части уязвимостей, представляют собой набор строк или регулярных выражений, которые необходимо искать в собранных в ходе сканирования приложения данных. Каждое правило определяет, какую строку или регулярное выражение искать, в данных каких модулей и в каком месте/каких форматах данных. Такой подход позволяет значительно сократить количество ложных срабатываний при поиске уязвимостей.</p>
+<p>В системе существует два вида правил анализа:</p>
+<ul>
+<li>Внутренние правила поиска уязвимостей, не подлежащие настройке и недоступные пользователю для просмотра и редактирования. Они не представлены на вкладке <strong>Правила</strong>.</li>
+<li>Правила, которые занимаются поиском чувствительной информации. Как раз они и представлены на вкладке Правила и описаны в этом разделе. Эти правила пользователь системы может модифицировать и настроить под работу со своим приложением.</li>
+</ul>
+<p>На вкладке <strong>Правила</strong> каждое правило анализа представлено отдельной строкой слева в <strong>Списке правил</strong>. Строка правила имеет следующие поля:</p>
+<ul>
+<li>Имя правила.</li>
+<li>Селектор состояния правила. Если селектор находится во включенном положении <img alt="" src="../img/swith_on.png" />, то правило является активным и будет применяться при анализе собранных данных для поиска уязвимостей. Если селектор находится в выключенном положении <img alt="" src="../img/swith_off.png" />, то правило является неактивным и не будет применяться при анализе собранных данных для поиска уязвимостей.</li>
+</ul>
+<figure markdown>
+![](img/94.png)
+</figure>
+
+<p>Выбранное правило подсвечивается и справа отображается <strong>Основная информация</strong> о нем:</p>
+<ul>
+<li><strong>Строки поиска</strong> — набор строк и регулярных выражений для поиска конфиденциальной информации.</li>
+<li><strong>Места поиска</strong> — где именно искать необходимую информацию, в каких файлах и форматах данных.</li>
+<li><strong>Список модулей</strong> — модули системы, для которых будет применяться данное правило.</li>
+</ul>
+<p>Система поддерживает вложенность правил, как в случае с правилом <strong>Серверные ключи</strong>.</p>
+<p>Рассмотрим, как работают правила анализа на примере одного из них.</p>
+<figure markdown>
+![](img/97.png)
+</figure>
+
+<p>Это правило анализа в данный момент является активным и называется «Пароль». Оно определяет, что следующие паттерны:</p>
+<ul>
+<li>Регулярные выражения вида <code>(pin(?:[_-]?code)?)|([\w]+_pin)|([\w]+Pin)</code>.</li>
+<li>Строка password.</li>
+<li>Строка passphrase.</li>
+</ul>
+<p>будут искаться в данных, собранных всеми модулями системы, выбранными в поле <strong>Список Модулей</strong>, в следующих местах, выбранных в поле <strong>Места поиска</strong>:</p>
+<ul>
+<li>Имя XML-тега.</li>
+<li>Имя ключа в JSON или YAML.</li>
+</ul>
+<p>Пользователь имеет возможность сделать неактивным или отредактировать это правило в случае необходимости.</p>
+<h2 id="_4">Редактирование правил анализа</h2>
+<p>Редактирование правил анализа может быть произведено на вкладке <strong>Правила</strong>. Для редактирования выберите необходимое правило слева в <strong>Списке правил</strong>. Справа в поле <strong>Основная информация</strong> можно изменить и сохранить следующие параметры:</p>
+<ul>
+<li><strong>Название</strong> правила. Для сохранения произведенных изменений нажмите кнопку <strong>Изменить</strong> справа.</li>
+<li><strong>Описание</strong> правила анализа. Для сохранения произведенных изменений нажмите кнопку <strong>Изменить</strong> справа.</li>
+<li>
+<p>В поле <strong>Строки поиска</strong> можно добавить строку или регулярное выражение для поиска конфиденциальной информации. Для этого необходимо нажать на кнопку <strong>Добавить</strong> справа в поле <strong>Строки поиска</strong>, в появившемся поле Строка поиска задать собственно новую строку или регулярное выражение и нажать кнопку <strong>Добавить</strong>.</p>
+<p><figure markdown>
+<img alt="" src="../img/98.png" />
+</figure></p>
+<p>Все ранее определенные регулярные выражения для данного правила перечислены в этом поле в списке ниже. Строки поиска, заданные на уровне компании, можно отключить с помощью селектора, расположенного рядом с каждой строкой. Строки поиска, заданные на уровне проекта, можно отключить или удалить. Для удаления строки поиска нажмите кнопку <strong>Удалить</strong> справа. </p>
+<p><figure markdown>
+<img alt="" src="../img/99.png" />
+</figure></p>
+</li>
+<li>
+<p><strong>Места поиска</strong> — у активных мест поиска селектор находится в положении <img alt="" src="../img/swith_on.png" />, у неактивных — в положении <img alt="" src="../img/swith_off.png" />. Для изменения необходимо нажать на селектор. Его положение изменится и будет отображено уведомление об успешном изменении.</p>
+</li>
+<li><strong>Список модулей</strong>, для которых будет применяться данное правило. Любой из модулей сканирования в системе можно выбрать и добавить в правило. Включение и отключение происходит аналогично полю <strong>Места поиска</strong>.</li>
+</ul>
+<h2 id="_5">Добавление правил анализа</h2>
+<p>Для добавления нового правила анализа нажмите кнопку <strong>Добавить правило</strong> в правом верхнем углу. В появившемся окне <strong>Добавить правило</strong> необходимо ввести имя и описание правила и нажать кнопку <strong>Добавить</strong> внизу справа.</p>
+<figure markdown>
+![](img/100.png)
+</figure>
+
+<p>Добавленное правило будет отображено в списке и доступно для дальнейшего редактирования. У вновь добавленного правила поле <strong>Строки поиска</strong> является пустым, а в полях <strong>Места поиска</strong> и <strong>Список модулей</strong> все селекторы находятся в положении выключено <img alt="" src="../img/swith_off.png" />.</p>
+<h2 id="_6">Удаление правил анализа</h2>
+<p>Удаление правил анализа может быть произведено на вкладке <strong>Правила</strong>. Для удаления правила нажмите на кнопку <strong>Удалить</strong> в правом верхнем углу поля <strong>Основная информация</strong>.</p>
+<figure markdown>
+![](img/102.png)
+</figure>
+
+<p>В появившемся диалоговом окне необходимо подтвердить или отменить удаление.</p>
+<figure markdown>
+![](img/103.png)
+</figure>
+
+<p>!!! note "Примечание"
+    В системе есть девять предустановленных правил, заданных на уровне компании, которые на уровне проекта можно только отключить, но нельзя удалить. Пользователь может удалить только прочие внесенные в список правила.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

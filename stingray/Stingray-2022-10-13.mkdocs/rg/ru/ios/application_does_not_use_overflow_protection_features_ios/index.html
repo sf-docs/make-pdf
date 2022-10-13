@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Приложение не использует функции защиты от переполнений - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Приложение не использует функции защиты от переполнений</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_5" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Приложение не использует функции защиты от переполнений</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_srednij.png"/></td>
+        <td>Критичность:<strong> СРЕДНИЙ</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> SAST, NETWORK</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_2">Описание</h2>
+<p>Платформа iOS предоставляет несколько способов защиты от эксплуатации уязвимостей, связанных с переполнениями. Отключение или неиспользование предложенных средств защиты может привести к возможности более простой эксплуатации уязвимостей.</p>
+<p>Хотя в Xcode по умолчанию включены все функции защиты, рекомендуется дополнительно проверить параметры компиляции.</p>
+<p>Возможно использование следующих функций:</p>
+<ul>
+<li>
+<p>ARC — автоматический подсчет ссылок  (функция управления памятью), при необходимости добавляет сообщения о сохранении и освобождении;</p>
+</li>
+<li>
+<p>Stack Canary — помогает предотвратить атаки переполнения буфера;</p>
+</li>
+<li>
+<p>PIE — Position Independent Executable — включает полную ASLR.</p>
+</li>
+</ul>
+<h2 id="_3">Рекомендации</h2>
+<p>Ниже представлено описание каждого из способов защиты и описаны риски, которые могут появиться из-за их отключения.</p>
+<h3 id="automatic-reference-counting">Automatic reference counting</h3>
+<p>Automatic reference counting (автоматический подсчет ссылок) — отслеживание и управление памятью вашего приложения. В большинстве случаев это означает, что управление памятью «просто работает» и не нужно думать о самостоятельном управлении памятью. ARC автоматически освобождает память, которая использовалась экземплярами класса, когда эти экземпляры больше не нужны.</p>
+<pre><code>"Targets"  &gt;  "Build Settings“ &gt; "Objective-C Automatic Reference Counting"  = “YES”
+</code></pre>
+<h3 id="stack-smashing-protection">Stack smashing protection</h3>
+<p>В ipa-архиве собранного приложения хранится исполняемый бинарный файл формата mach-o. Он содержит следующие секции: статической информации приложения (текст, константы и т. д.), исполняемого кода, включенных статических библиотек и списка динамически подгружаемых ресурсов. Наряду с таблицей разбиения и положения (адресов) этих секций присутствует область данных с флагами этапа компиляции и особенностей его работы для загрузчика ОС.</p>
+<p>Одним из них является флаг режима защиты приложения от переполнения стека и перехвата управления. Так же он называется canary-protection (канареечная защита) и заключается в добавлении битовых флагов на границах фрейма стека. При попытке выйти за границы стека и перезаписать адрес возврата из функции произвольным значением перезапишется и сам сигнальный бит, о чем будет оповещена ОС и процесс приложения будет остановлен.</p>
+<p>Режим компиляции с защитой стека от переполнения задается средой IDE Xcode, в меню настройки компиляции и задается директивой “-fstack-protector-all“.</p>
+<figure markdown>
+![](../../img/image9.png)
+</figure>
+
+<p>Опция <code>‘OTHER_CFLAGS = "-fstack-protector-all"’</code> является обязательной для проектов на C / C++ / Objective-C - языков с ручным управлением памятью.</p>
+<h4 id="_4">Ручной анализ</h4>
+<p>Проверить наличие данного режима в собранном приложении можно распаковав ipa-архив и проанализировав хранящийся в нем бинарный файл утилитой “otool” на наличие данной настройки. Для этого можно использовать следующую команду:</p>
+<pre><code>otool -Iv DVIA | grep stack
+</code></pre>
+<figure markdown>
+![](../../img/image11.png)
+</figure>
+
+<p>На изображении можно видеть наличие признаков защиты стека.</p>
+<p>Так же можно воспользоваться утилитой  objection и получить более подробную информацию.</p>
+<figure markdown>
+![](../../img/image10.png)
+</figure>
+
+<h3 id="swift">Особенности Swift приложений</h3>
+<p>Swift — это язык с парадигмой «строгой типизации» и проверкой границ объектов на стадии компиляции. Это сводит к минимуму риск выхода за границы стека и перехвата управления процессами благодаря архитектуре самого языка и проверкам компилятора LLVM на стадии компиляции. Компилятор не оставляет информацию о директивах защиты стека в бинарном файле при его сборке.</p>
+<p>!!! note "Важно"
+    Для проектов, написанных только на Swift, флага в итоговом бинарном файле не будет! Так как для исполняемых файлов написанных на чистом Swift он не имеет смысла.</p>
+<p>В свете вышесказанного для достоверного определения включенного режима защиты стека от переполнения необходимо проанализировать исходный код Xcode-проекта и его настроек компиляции, в разделе указанном выше, а в случае возникновения срабатывания на этом флаге определить, используется ли Objective-C при разработке.</p>
+<h3 id="aslr-address-space-layout-randomization">ASLR (Address space layout randomization)</h3>
+<p>Рандомизация размещения адресного пространства — технология, при использовании которой случайным образом изменяется расположение в адресном пространстве процесса важных структур данных, а именно образов исполняемого файла, подгружаемых библиотек, кучи и стека.</p>
+<p>Технология ASLR создана для усложнения эксплуатации нескольких типов уязвимостей. Например, если при помощи переполнения буфера или другим методом атакующий получит возможность передать управление по произвольному адресу, ему нужно будет угадать, по какому именно адресу расположен стек, куча или другие структуры данных, в которые можно поместить код.</p>
+<pre><code>"Targets"  &gt;  "Generate Position-Dependent Code“ = "NO"
+
+"Targets"  &gt;  "Don't Create Position Independent Executables “ = "NO"
+</code></pre>
+<p>На картинке ниже наглядно показано, как размещаются данные приложения в памяти с использованием рандомизации и без неё:</p>
+<figure markdown>
+![](../../img/aslr-address-space-layout-randomization.png)
+</figure>
+
+<h2 id="_5">Ссылки</h2>
+<ol>
+<li>
+<p><a href="https://ru.bmstu.wiki/PIE_(Position_Independent_Execution)">https://ru.bmstu.wiki/PIE_(Position_Independent_Execution)</a></p>
+</li>
+<li>
+<p><a href="https://access.redhat.com/blogs/766093/posts/3548631">https://access.redhat.com/blogs/766093/posts/3548631</a></p>
+</li>
+<li>
+<p><a href="https://ru.bmstu.wiki/ASLR_(Address_Space_Layout_Randomization)">https://ru.bmstu.wiki/ASLR_(Address_Space_Layout_Randomization)</a></p>
+</li>
+<li>
+<p><a href="https://bellis1000.medium.com/aslr-the-ios-kernel-how-virtual-address-spaces-are-randomised-d76d14dc7ebb">https://bellis1000.medium.com/aslr-the-ios-kernel-how-virtual-address-spaces-are-randomised-d76d14dc7ebb</a></p>
+</li>
+<li>
+<p><a href="https://developer.apple.com/forums/thread/86355">https://developer.apple.com/forums/thread/86355</a></p>
+</li>
+<li>
+<p><a href="https://developer.apple.com/forums/thread/106300">https://developer.apple.com/forums/thread/106300</a></p>
+</li>
+<li>
+<p><a href="https://sensepost.com/blog/2021/on-ios-binary-protections/">https://sensepost.com/blog/2021/on-ios-binary-protections/</a></p>
+</li>
+<li>
+<p><a href="https://resources.infosecinstitute.com/topic/penetration-testing-for-iphone-applications-part-5/">https://resources.infosecinstitute.com/topic/penetration-testing-for-iphone-applications-part-5/</a></p>
+</li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

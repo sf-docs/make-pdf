@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Хранение публичного ключа/сертификата в директории/ресурсах приложения - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Хранение публичного ключа/сертификата в директории/ресурсах приложения</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Хранение публичного ключа/сертификата в директории/ресурсах приложения</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_info.png"/></td>
+        <td>Критичность:<strong> ИНФО</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> DAST, SENSITIVE INFO</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_2">Описание</h2>
+<p>Хранение публичного ключа в директории/ресурсах приложения в общем случае не является проблемой. Публичные ключи обычно используются для шифрования/подписи данных или для осуществления подтверждения подлинности сервера.</p>
+<p>Более серьезной уязвимостью является использование одного ключа, поставляемого с приложением (в ресурсах или получаемого с сервера) для шифрования данных пользователей. Получив значение закрытого ключа, в случае его компрометации, станет возможно расшифровать данные другого пользователя. Или, если публичный ключ станет возможно подменить и он используется для подтверждения подлинности сервера, повышается риск осуществление атаки человек посередине (MiTM).</p>
+<h2 id="_3">Рекомендации</h2>
+<p>Несмотря на то, что хранение открытого ключа не является уязвимостью, ниже представлены подходы к безопасному использованию и хранению ключей.</p>
+<p>Для хранения ключей рекомендуемым способом является использование KeyChain.</p>
+<p>KeyStore предоставляет несколько основных функций, которые существенно упрощают работу с криптографическими ключами:</p>
+<ul>
+<li>Случайная генерация ключей.</li>
+<li>Надежное хранение ключей.</li>
+</ul>
+<p>Все, что вам нужно сделать, это:</p>
+<ul>
+<li>Сгенерировать случайный ключ при первом запуске приложения.</li>
+<li>Если вы хотите зашифровать данные, получите ключ из KeyStore, зашифруйте с его помощью данные, а затем сохраните зашифрованные данные.</li>
+<li>Если вы хотите расшифровать данные, получите ключ из KeyStore, а затем используйте его для расшифровки данных.</li>
+</ul>
+<blockquote>
+<p>Способ использования Android KeyStore отличается в зависимости от версии (до и после Android 6).</p>
+</blockquote>
+<h3 id="android-6">Android 6 и выше</h3>
+<p>Для уровня API 23 и выше реализация будет проще, поскольку генерация AES ключей происходит средствами системы. Пример можно найти в документации <a href="https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec">API KeyGenParameterSpec</a>.</p>
+<p><strong>Генерация ключа:</strong></p>
+<pre><code>private static final String AndroidKeyStore = "AndroidKeyStore";
+private static final String AES_MODE = "AES/GCM/NoPadding";
+keyStore = KeyStore.getInstance(AndroidKeyStore);
+keyStore.load(null);
+if (!keyStore.containsAlias(KEY_ALIAS)) {
+    KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, AndroidKeyStore);
+    keyGenerator.init(
+            new KeyGenParameterSpec.Builder(KEY_ALIAS,
+                    KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .setRandomizedEncryptionRequired(false) 
+                    .build());
+    keyGenerator.generateKey();
+}
+</code></pre>
+<p><strong>Получение ключа:</strong></p>
+<pre><code>private java.security.Key getSecretKey(Context context) throws Exception {
+return keyStore.getKey(XEALTH_KEY_ALIAS, null);
+}
+</code></pre>
+<p><strong>Шифрование данных:</strong></p>
+<pre><code>Cipher c = Cipher.getInstance(AES_MODE);
+c.init(Cipher.ENCRYPT_MODE, getSecretKey(context), new GCMParameterSpec(128, FIXED_IV.getBytes()));
+byte[] encodedBytes = c.doFinal(input);
+String encryptedBase64Encoded = Base64.encodeToString(encodedBytes, Base64.DEFAULT);
+return encryptedBase64Encoded;
+</code></pre>
+<p><strong>Расшифровка данных:</strong></p>
+<pre><code>Cipher c = Cipher.getInstance(AES_MODE);
+c.init(Cipher.DECRYPT_MODE, getSecretKey(context), new GCMParameterSpec(128, FIXED_IV.getBytes()));
+byte[] decodedBytes = c.doFinal(encrypted);
+return decodedBytes;
+</code></pre>
+<p><strong>Вектор инициализации</strong></p>
+<p>Вектор инициализации — это криптографическая функция, которая отвечает за случайность первого блока шифрования. Нужно помнить, что IV, который используется при шифровании, должен быть тем же самым, который используется при расшифровке. По умолчанию Android заставляет каждый раз использовать случайный IV, но можно отключить его, вызвав <code>setRandomizedEncryptionRequired ()</code> при генерации ключа.</p>
+<p>Благодаря безопасности, обеспечиваемой Android KeyStore, случайный IV является излишним, поэтому вместо этого возможно использовать фиксированный IV. Если есть необходимость использовать случайные IV, можно вызвать метод <code>getIV()</code> при шифровании данных и использовать тот же IV при их расшифровке.</p>
+<h3 id="android-6_1">Ниже Android 6</h3>
+<p>Для версий Android API ниже 23 (Android 6), требуется немного больше работы. <a href="https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.html">KeyGenParameterSpec</a> доступен только в API 23, поэтому хранилище KeyStore не может само генерировать случайные ключи AES. Вместо этого необходимо самим сгенерировать ключи используя <a href="https://developer.android.com/reference/android/security/KeyPairGeneratorSpec.html">API KeyPairGeneratorSpec</a>.</p>
+<p>Как следует из названия, KeyPairGeneratorSpec генерирует пары открытого и закрытого ключей. Шифрование с открытым ключом предназначено в основном для подписи и аутентификации и не подходит для шифрования больших блоков данных, но может сочетаться с блочным шифром, таким как AES.</p>
+<p>То есть это принцип KEK+DEK (Key Encryption Key + Data Encryption Key). Шифруем данные на одном ключе, который в свою очередь шифруем на другом ключе, который хранится в KeyStore. У такого подхода есть свои плюсы, например при изменении ключа шифрования достаточно перешифровать AES ключ и не трогать пользовательские данные (не перешифровывать их). Примерный алгоритм действий выглядит следующим образом:</p>
+<p><strong>Генерация ключей:</strong></p>
+<ul>
+<li>Сгенерировать пару ключей RSA.</li>
+<li>Сгенерировать случайный ключ AES.</li>
+<li>Зашифровать ключ AES с помощью открытого ключа RSA.</li>
+<li>Сохранить зашифрованный ключ в Shared Preferences.</li>
+</ul>
+<p><strong>Шифрование и хранение данных:</strong></p>
+<ul>
+<li>Получить зашифрованный ключ AES из Shared Preferences.</li>
+<li>Расшифровать ключ, используя закрытый ключ RSA.</li>
+<li>Зашифровать данные с помощью ключа AES.</li>
+</ul>
+<p><strong>Получение и расшифровка данных:</strong></p>
+<ul>
+<li>Получить зашифрованный ключ AES из Shared Preferences.</li>
+<li>Расшифровать ключ, используя закрытый ключ RSA.</li>
+<li>Расшифровать данные с помощью ключа AES.</li>
+</ul>
+<p><strong>Генерация RSA ключей</strong></p>
+<pre><code>private static final String     AndroidKeyStore = "AndroidKeyStore";
+keyStore = KeyStore.getInstance(AndroidKeyStore);
+keyStore.load(null);
+// Generate the RSA key pairs
+if (!keyStore.containsAlias(KEY_ALIAS)) {
+    // Generate a key pair for encryption
+    Calendar start = Calendar.getInstance();
+    Calendar end = Calendar.getInstance();
+    end.add(Calendar.YEAR, 30);
+    KeyPairGeneratorSpec spec = new      KeyPairGeneratorSpec.Builder(context)
+            .setAlias(KEY_ALIAS)
+            .setSubject(new X500Principal("CN=" + KEY_ALIAS))
+            .setSerialNumber(BigInteger.TEN)
+            .setStartDate(start.getTime())
+            .setEndDate(end.getTime())
+            .build();
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, AndroidKeyStore);
+    kpg.initialize(spec);
+    kpg.generateKeyPair();
+}
+</code></pre>
+<p><strong>Процедуры шифрования и дешифрования RSA:</strong></p>
+<pre><code>private static final String RSA_MODE =  "RSA/ECB/PKCS1Padding";
+private byte[] rsaEncrypt(byte[] secret) throws Exception{
+    KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(KEY_ALIAS, null);
+    // Encrypt the text
+    Cipher inputCipher = Cipher.getInstance(RSA_MODE, "AndroidOpenSSL");
+    inputCipher.init(Cipher.ENCRYPT_MODE, privateKeyEntry.getCertificate().getPublicKey());
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    CipherOutputStream cipherOutputStream = new CipherOutputStream(outputStream, inputCipher);
+    cipherOutputStream.write(secret);
+    cipherOutputStream.close();
+    byte[] vals = outputStream.toByteArray();
+    return vals;
+}
+private  byte[]  rsaDecrypt(byte[] encrypted) throws Exception {
+    KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(KEY_ALIAS, null);
+    Cipher output = Cipher.getInstance(RSA_MODE, "AndroidOpenSSL");
+    output.init(Cipher.DECRYPT_MODE, privateKeyEntry.getPrivateKey());
+    CipherInputStream cipherInputStream = new CipherInputStream(
+            new ByteArrayInputStream(encrypted), output);
+    ArrayList values = new ArrayList&lt;&gt;();
+    int nextByte;
+    while ((nextByte = cipherInputStream.read()) != -1) {
+        values.add((byte)nextByte);
+    }
+    byte[] bytes = new byte[values.size()];
+    for(int i = 0; i &lt; bytes.length; i++) {
+        bytes[i] = values.get(i).byteValue();
+    }
+    return bytes;
+}
+</code></pre>
+<p><strong>Генерация и сохранение AES ключа:</strong></p>
+<pre><code>SharedPreferences pref = context.getSharedPreferences(SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+String enryptedKeyB64 = pref.getString(ENCRYPTED_KEY, null);
+if (enryptedKeyB64 == null) {
+byte[] key = new byte[16];
+SecureRandom secureRandom = new SecureRandom();
+secureRandom.nextBytes(key);
+byte[] encryptedKey = rsaEncrypt(key);
+enryptedKeyB64 = Base64.encodeToString(encryptedKey, Base64.DEFAULT);
+SharedPreferences.Editor edit = pref.edit();
+edit.putString(ENCRYPTED_KEY, enryptedKeyB64);
+edit.commit();
+}
+</code></pre>
+<p><strong>Шифрование и расшифровка данных:</strong></p>
+<pre><code>private static final String AES_MODE = "AES/ECB/PKCS7Padding";
+private Key getSecretKey(Context context) throws Exception{
+    SharedPreferences pref = context.getSharedPreferences(SHARED_PREFENCE_NAME, Context.MODE_PRIVATE);
+    String enryptedKeyB64 = pref.getString(ENCRYPTED_KEY, null);          
+    // need to check null, omitted here
+    byte[] encryptedKey = Base64.decode(enryptedKeyB64, Base64.DEFAULT);
+    byte[] key = rsaDecrypt(encryptedKey);
+    return new SecretKeySpec(key, "AES");
+}
+public String encrypt(Context context, byte[] input) {
+    Cipher c = Cipher.getInstance(AES_MODE, "BC");
+    c.init(Cipher.ENCRYPT_MODE, getSecretKey(context));
+    byte[] encodedBytes = c.doFinal(input);
+    String encryptedBase64Encoded =  Base64.encodeToString(encodedBytes, Base64.DEFAULT);
+    return encryptedBase64Encoded;
+}
+public byte[] decrypt(Context context, byte[] encrypted) {
+    Cipher c = Cipher.getInstance(AES_MODE, "BC");
+    c.init(Cipher.DECRYPT_MODE, getSecretKey(context));
+    byte[] decodedBytes = c.doFinal(encrypted);
+    return decodedBytes;
+}
+</code></pre>
+<h2 id="_4">Ссылки</h2>
+<ol>
+<li>
+<p><a href="https://doridori.github.io/android-security-the-forgetful-keystore/#sthash.cxj8r3G6.dpbs">https://doridori.github.io/android-security-the-forgetful-keystore/#sthash.cxj8r3G6.dpbs</a></p>
+</li>
+<li>
+<p><a href="http://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.html">http://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.html</a></p>
+</li>
+<li>
+<p><a href="http://developer.android.com/reference/android/security/KeyPairGeneratorSpec.html">http://developer.android.com/reference/android/security/KeyPairGeneratorSpec.html</a></p>
+</li>
+<li>
+<p><a href="https://medium.com/@ericfu/securely-storing-secrets-in-an-android-application-501f030ae5a3#:~:text=With%20these%2C%20storing%20secrets%20becomes,the%20encrypted%20data%20in%20Preferences.">https://medium.com/@ericfu/securely-storing-secrets-in-an-android-application-501f030ae5a3#:~:text=With%20these%2C%20storing%20secrets%20becomes,the%20encrypted%20data%20in%20Preferences.</a></p>
+</li>
+<li>
+<p><a href="https://www.owasp.org/index.php/Mobile_Top_10_2016-M2-Insecure_Data_Storage">https://www.owasp.org/index.php/Mobile_Top_10_2016-M2-Insecure_Data_Storage</a></p>
+</li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
