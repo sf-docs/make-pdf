@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Интеграция с Firebase - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../sistema_distribucii_nexus_repository/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../integraciya_s_appstore/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#firebase" class="nav-link">Интеграция с Firebase</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Сбор необходимых параметров</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Пример запуска скрипта</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="firebase">Интеграция с Firebase</h1>
+<h2 id="_1">Сбор необходимых параметров</h2>
+<p>Система Stingray предлагает возможность интеграции с популярным набором сервисов <a href="https://firebase.google.com/">Firebase</a> от компании Google, который используется на всех этапах жизненного цикла разработки программного обеспечения для мобильных устройств.</p>
+<p>Интеграция с Firebase производится с помощью скрипта <a href="https://github.com/Dynamic-Mobile-Security/mdast-cli">mdast_scan.py</a>. Для запуска скрипта в режиме интеграции с Firebase необходимо указать параметр <code>--distribution_system firebase</code>.</p>
+<p>Чтобы скачать приложение с Firebase и просканировать его, необходимо собрать информацию о значениях cookies для Google SSO аутентификации, а также о значениях параметров проекта в Firebase. </p>
+<p>!!! note "Примечание"
+    Не используйте личные учетные записи, так как параметры, используемые в процессе аутентификации в Firebase, привязаны к вашему аккаунту. Мы рекомендуем создать специальную техническую учетную запись для интеграции.</p>
+<p>В браузере авторизуйтесь в Firebase с использованием Google SSO и соберите информацию о неоходимых cookies. Например, при использовании браузера Google Chrome или Microsoft Edge откройте DevTools, нажав F12 или использовав специальную комбинацию клавиш, которая применяется для этого в вашем браузере, перейдите на вкладку <strong>Application</strong>, а затем, выбрав в меню слева пункт <strong>Cookies</strong>, скопируйте значения следующих cookies: <strong>SID</strong>, <strong>SSID</strong>, <strong>APISID</strong>, <strong>SAPISID</strong> и <strong>HSID</strong>. Данная информация впоследствии будет использоваться в качестве параметров запуска скрипта <a href="https://github.com/Dynamic-Mobile-Security/mdast-cli">mdast_scan.py</a>.</p>
+<figure markdown>
+![](img/11.png)
+</figure>
+
+<p>Далее необходимо получить следующие параметры проекта: <strong>project_id</strong>, <strong>app_id</strong>, <strong>app_code</strong> и <strong>api_key</strong>. Для этого перейдите на страницу проекта, адрес которой имеет следующий вид:</p>
+<pre><code>https://console.firebase.google.com/u/0/project/{project_id}/overview
+</code></pre>
+<figure markdown>
+![](img/12.png)
+</figure>
+
+<p>Слева в меню в разделе <strong>Release &amp; Monitor</strong> выберите пункт <strong>App Distribution</strong>. Предварительно открыв DevTools (F12), выберите необходимый релиз из списка и нажмите кнопку <strong>Download</strong>.</p>
+<figure markdown>
+![](img/13.png)
+</figure>
+
+<p>В окне DevTools на вкладке <strong>Network</strong> отследите запрос, содержащий URL следующего вида:</p>
+<pre><code>https://firebaseappdistribution-pa.clients6.google.com/v1/projects/{project_id}/apps/{app_id}/releases/{app_code}:getLatestBinary?alt=json&amp;key={api_key}
+</code></pre>
+<figure markdown>
+![](img/14.png)
+</figure>
+
+<p>Из данного URL получаем остальные необходимые параметры.</p>
+<p>В результате все необходимые параметры для запуска скрипта <a href="https://github.com/Dynamic-Mobile-Security/mdast-cli">mdast_scan.py</a> собраны. В зависимости от того, какое приложение скачивается, необходимо с помощью параметра <code>firebase_app_extension</code> указать расширение файла: для Android приложения — <code>apk</code> , а для iOS — <code>ipa</code>.</p>
+<p>Приведем полный список собранных параметров:</p>
+<ul>
+<li><code>firebase_SID_cookie</code> — SID;</li>
+<li><code>firebase_HSID_cookie</code> — HSID;</li>
+<li><code>firebase_SSID_cookie</code> — SSID;</li>
+<li><code>firebase_APISID_cookie</code> — APISID;</li>
+<li><code>firebase_SAPISID_cookie</code> — SAPISID;</li>
+<li><code>firebase_project_id</code> — {project id};</li>
+<li><code>firebase_app_id</code> — {application id};</li>
+<li><code>firebase_app_code</code> — {application code};</li>
+<li><code>firebase_api_key</code> — {api key}.</li>
+<li><code>firebase_app_extension</code> — расширение файла: apk для Android или ipa для iOS.</li>
+</ul>
+<p>Также возможно задать название скачиваемого файла, для этого надо задать опциональный параметр <code>firebase_file_name</code>.</p>
+<h2 id="_2">Пример запуска скрипта</h2>
+<p>Чтобы запустить сканирование приложения, скачанного с Firebase, необходимо выполнить следующую команду:</p>
+<pre><code>python mdast_cli/mdast_scan.py \
+  --profile_id 468 \
+  --architecture_id 2 \
+  --distribution_system firebase \
+  --firebase_project_id 2834204**** \
+  --firebase_app_id 1:283***3642:android:8b0a0***56ac40c1a43 \
+  --firebase_app_code 2b***sltr0 \
+  --firebase_api_key AIzaSyDov*****qKdbj-geRWyzMTrg \
+  --firebase_SID_cookie FgiA*****ZiQakQ-_C-5ZaEHvbDMFGkrgriAByQ9P9fv7LfRrYJ5suXgrCwIQBoOjA.  \
+  --firebase_HSID_cookie AsiL****OjPI \
+  --firebase_SSID_cookie A****dwcZk1Z-1pE \
+  --firebase_APISID_cookie Z-FmS1aPB****djK/AjmG0h2Hc-GG9g2Ac \
+  --firebase_SAPISID_cookie XYR2tnf****0zOt/AEvVZ8JVEuCnE6pxm \
+  --url "https://saas.mobile.appsec.world" \
+  --company_id 1 \ 
+  --token 2fac9652a2fbe4****9f44af59c3381772f \
+  --firebase_file_name your_app_file_name  \
+  --firebase_file_extension apk
+</code></pre>
+<p>.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

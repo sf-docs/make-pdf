@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Система дистрибуции AppCenter - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../sistemy_ci_cd/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../sistema_distribucii_nexus_repository/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#appcenter" class="nav-link">Система дистрибуции AppCenter</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Параметры запуска</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Примеры запуска</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="appcenter">Система дистрибуции AppCenter</h1>
+<h2 id="_1">Параметры запуска</h2>
+<p>Параметры запуска зависят от расположения файла apk, отправляемого на анализ. Также существуют обязательные параметры, которые необходимо указывать при любом виде запуска:</p>
+<ul>
+<li><code>url</code> — сетевой адрес Stingray (путь до корня без последнего «/»), при использовании cloud версии — <a href="https://saas.stingray-mobile.ru">https://saas.stingray-mobile.ru</a>; </li>
+<li><code>profile_id</code> — id профиля, для которого проводится анализ;</li>
+<li><code>testcase_id</code> — id того тест-кейса, который будет воспроизведен во время анализа; возможен запуск нескольких тест-кейсов, для этого их id перечисляются через пробел. Это необязательный параметр, если он не задан, то будет запущено сканирование в ручном режиме и через 20 секунд после запуска остановлено, а данные отправлены на анализ;</li>
+<li><code>token</code> — CI/CD токен для доступа, более подробная информация приведена в разделе «<a href="../integracii/">Интеграции</a>» Руководства пользователя;</li>
+<li><code>distribution_system</code> — способ загрузки приложения, возможные опции: <code>file</code>, <code>google_play</code>, <code>appstore</code>, <code>firebase</code>, <code>appcenter</code>, <code>nexus</code>;</li>
+<li><code>company_id</code> — идентификатор компании, в рамках которой будет осуществлено сканирование;</li>
+<li><code>architecture_id</code> — опциональный параметр. Определяет идентификатор архитектуры операционной системы, на которой будет произведено сканирование;</li>
+<li><code>nowait</code> — опциональный параметр, определяющий необходимость ожидания завершения сканирования. Если данный флаг установлен — скрипт не будет дожидаться завершения сканирования, а выйдет сразу же после запуска. Если флаг не установлен — скрипт будет ожидать завершения процесса анализа и формировать отчет;</li>
+<li><code>summary_report_json_file_name</code> — опциональный параметр. Определяет имя JSON файла, в который выгружается информация по сканированию в формате JSON. При отсутствии параметра информация сохраняться в JSON не будет;</li>
+<li><code>pdf_report_file_name</code> — опциональный параметр. Определяет имя PDF файла в который выгружается информация по сканированию в формате PDF. При отсутствии параметра PDF-отчет сохраняться не будет.</li>
+</ul>
+<p>Для загрузки приложения из системы дистрибуции AppCenter при запуске необходимо указать параметр <code>distribution_system appcenter</code>. Также необходимо указать обязательные параметры:</p>
+<ul>
+<li><code>appcenter_token</code> — API токен для доступа. Как его получить, можно узнать <a href="https://docs.microsoft.com/en-us/appcenter/api-docs/">здесь</a>;</li>
+<li><code>appcenter_owner_name</code> — владелец приложения. Как узнать имя владельца, можно прочитать <a href="https://intercom.help/appcenter/en/articles/1764707-how-to-find-the-app-name-and-owner-name-from-your-app-url">здесь</a> или в <a href="https://docs.microsoft.com/en-us/appcenter/api-docs/#find-your-app-center-app-name-and-owner-name">официальной документации</a>;</li>
+<li><code>appcenter_app_name</code> — имя приложения в системе AppCenter. Как его узнать, можно прочитать <a href="https://docs.microsoft.com/en-us/appcenter/api-docs/#find-your-app-center-app-name-and-owner-name">здесь</a>;<ul>
+<li><code>appcenter_release_id</code> или <code>appcenter_app_version</code>:</li>
+<li><code>appcenter_release_id</code> — идентификатор загружаемого релиза в системе AppCenter для конкретного приложения. Возможно выставить значение <code>latest</code> — тогда будет загружен последний доступный релиз приложения (<a href="https://openapi.appcenter.ms/#/distribute/releases_getLatestByUser">официальная документация</a>);</li>
+<li><code>appcenter_app_version</code> — при указании данного параметра будет найдена и скачана конкретная версия приложения по коду его версии (указанной в Android Manifest) (поле <code>version</code> в <a href="https://openapi.appcenter.ms/#/distribute/releases_list">документации</a>).</li>
+</ul>
+</li>
+</ul>
+<h2 id="_2">Примеры запуска</h2>
+<h3 id="appcenter-id">AppCenter по id релиза</h3>
+<p>Для запуска анализа приложения по известному имени, владельцу и ID релиза необходимо выполнить следующую команду:</p>
+<pre><code>mdast_cli --distribution_system appcenter --appcenter_token 18bc81146d374ba4b1182ed65e0b3aaa 
+  --appcenter_owner_name test_org_or_user --appcenter_app_name demo_app --appcenter_release_id 710 
+  --url "https://saas.stingray-mobile.ru" --profile_id 2 --testcase_id 3 --company_id 1 --architecture_id 1
+  --token "eyJ0eXA4OiJKA1QiLbJhcGciO5JIU4I1NiJ1..."
+</code></pre>
+<p>В результате у владельца (пользователя или организации <code>test_org_or_user</code>) будет найдено приложение <code>demo_app</code> с <code>ID</code> релиза <code>710</code>. Данная версия релиза будет загружена и передана на анализ безопасности в Stingray.</p>
+<p>Для загрузки релиза с последней версией необходимо указать параметр <code>appcenter_release_id latest</code>. Тогда команда будет выглядеть следующим образом:</p>
+<pre><code>mdast_cli --distribution_system appcenter --appcenter_token 18bc81146d374ba4b1182ed65e0b3aaa 
+  --appcenter_owner_name "test_org_or_user" --appcenter_app_name "demo_app" --appcenter_release_id latest 
+  --url "https://saas.stingray-mobile.ru" --profile_id 2 --testcase_id 3 --company_id 1 --architecture_id 1
+  --token "eyJ0eXA4OiJKA1QiLbJhcGciO5JIU4I1NiJ1..."
+</code></pre>
+<p>и будет загружен последний доступный релиз для данного приложения.</p>
+<h3 id="appcenter_1">AppCenter по версии приложения</h3>
+<p>Для запуска анализа приложения по известному имени, владельцу и версии приложения (<code>version_code</code> в Android Manifest) необходимо выполнить следующую команду:</p>
+<pre><code>mdast_cli --distribution_system appcenter --appcenter_token 18bc81146d374ba4b1182ed65e0b3aaa 
+  --appcenter_owner_name "test_org_or_user" --appcenter_app_name "demo_app" --appcenter_app_version 31337 
+  --url "https://saas.stingray-mobile.ru" --profile_id 2 --testcase_id 3 --company_id 1 --architecture_id 1 
+  --token "eyJ0eXA4OiJKA1QiLbJhcGciO5JIU4I1NiJ1..."
+</code></pre>
+<p>В результате у владельца (пользователя или организации <code>test_org_or_user</code>) будет найдено приложение <code>demo_app</code> и найден релиз, в котором была указана версия приложения <code>31337</code>. Данная версия релиза будет загружена и передана на анализ безопасности в Stingray.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

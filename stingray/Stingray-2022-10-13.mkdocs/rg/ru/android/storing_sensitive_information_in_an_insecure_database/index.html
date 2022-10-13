@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Хранение чувствительной информации в незащищённой базе данных - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Хранение чувствительной информации в незащищённой базе данных</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Хранение чувствительной информации в незащищённой базе данных</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_nizkij.png"/></td>
+        <td>Критичность:<strong> НИЗКИЙ</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> DAST, DATA BASES</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_2">Описание</h2>
+<p>Приложение хранит чувствительную информацию в незащищенной базе данных, что может повлечь компрометацию данных. </p>
+<p>Несмотря на то, что файл хранится внутри директории приложения, не стоит хранить в нем чувствительную информацию. Получить эту информацию можно разными способами, начиная локальным или облачным бекапом и заканчивая различными уязвимостями чтения файлов и инъекций в Content Provider.</p>
+<p>Чтобы понять, какие именно данные необходимо защищать, прежде всего необходимо определить, какие данные обрабатывает и хранит приложение, и какая часть из этой информации считается конфиденциальной. Как правило, в таких случаях полагаются на законодательство и здравый смысл. Нет смысла защищать шифрованием абсолютно всю информацию, которую хранит приложение — это может повлиять на скорость и стабильность работы. Вместо этого следует однозначно определить, какие именно данные являются конфиденциальными для вашего приложения или компании и сосредоточить свое внимание именно на них.</p>
+<h2 id="_3">Рекомендации</h2>
+<p>В случае необходимости хранения чувствительной информации в базе данных нужно дополнительно шифровать итоговую базу данных или данные, которые в ней хранятся. В качестве примера с шифрованием базы данных можно воспользоваться библиотекой <a href="https://github.com/sqlcipher/sqlcipher">sqlcipher</a>.</p>
+<p><strong>Пример использования SQLCipher (Java):</strong></p>
+<pre><code>package com.demo.sqlcipher;
+import java.io.File;
+import net.sqlcipher.database.SQLiteDatabase;
+import android.app.Activity;
+import android.os.Bundle;
+public class HelloSQLCipherActivity extends Activity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        InitializeSQLCipher();
+    }
+    private void InitializeSQLCipher() {
+        SQLiteDatabase.loadLibs(this);
+        File databaseFile = getDatabasePath("demo.db");
+        databaseFile.mkdirs();
+        databaseFile.delete();
+        SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "test123", null);
+        database.execSQL("create table t1(a, b)");
+        database.execSQL("insert into t1(a, b) values(?, ?)", new Object[]{"one for the money",
+                                                                        "two for the show"});
+    }
+}
+</code></pre>
+<p><strong>Пример использования SQLCipher (Kotlin):</strong></p>
+<pre><code>package com.demo.sqlcipher
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import net.sqlcipher.database.SQLiteDatabase
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        SQLiteDatabase.loadLibs(this)
+        val databaseFile = getDatabasePath("demo.db")
+        if(databaseFile.exists()) databaseFile.delete()
+        databaseFile.mkdirs()
+        databaseFile.delete()
+        val database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "test123", null)
+        database.execSQL("create table t1(a, b)")
+        database.execSQL("insert into t1(a, b) values(?, ?)",
+            arrayOf&lt;Any&gt;("one for the money", "two for the show")
+        )
+    }
+}
+</code></pre>
+<p>В данном примере использован «захардкоженный» пароль для базы данных <strong>«test123»</strong>. В реальном приложении не стоит использовать настолько ненадежный пароль и хранить его в исходном коде или в открытом виде.</p>
+<p>В качестве способа без хранения пароля — вычисление его «на лету» с использованием пароля пользователя при помощи процедуры усиления ключа.</p>
+<p>Правила:</p>
+<ol>
+<li>Явно определяйте режим шифрования и дополнения блоков.</li>
+<li>Используйте криптостойкие технологии шифрования, включающие алгоритм, режим блочного шифрования и режим дополнения блоков.</li>
+<li>В процессе генерации ключа на основе пароля используйте «соль» (salt).</li>
+<li>В процессе генерации ключа на основе пароля используйте достаточное количество итераций хеширования.</li>
+<li>Используйте ключ с длиной, которая обеспечит криптостойкость шифрования.<pre><code>import android.os.Build
+package com.appsec.android.cryptsymmetricpasswordbasedkey;
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
+@Deprecated("Use Argon2 instead")
+internal object Pbkdf2Factory {
+    private const val DEFAULT_ITERATIONS = 10_000
+    private val systemAlgorithm by lazy {
+        if (Build.VERSION.SDK_INT &lt; Build.VERSION_CODES.O) {
+            "PBKDF2withHmacSHA1"
+        } else {
+            "PBKDF2withHmacSHA256"
+        }
+    }
+    fun createKey(
+        passphraseOrPin: CharArray,
+        salt: ByteArray,
+        algorithm: String = systemAlgorithm,
+        iterations: Int = DEFAULT_ITERATIONS
+    ): Pbkdf2Key {
+        @Suppress("MagicNumber")
+        val keySpec = PBEKeySpec(passphraseOrPin, salt, iterations, 256)
+        val secretKey = SecretKeyFactory.getInstance(algorithm).generateSecret(keySpec)
+        return Pbkdf2Key(
+            secretKey.algorithm,
+            iterations,
+            salt,
+            secretKey.encoded
+        )
+    }
+}
+</code></pre>
+</li>
+</ol>
+<p>В дальнейшем получившееся значение ключа можно использовать в качестве пароля для шифрования базы данных и нет необходимости в его хранении,  так как каждый раз при вводе пароля он буде вычисляться на лету и передаваться в функцию открытия БД.</p>
+<p>!!! note "Важно!"
+    При таком подходе при изменении секрета (пароля пользователя) данные необходимо перешифровать с новым секретом, если есть необходимость в их сохранении. Также если пароль пользователя представляет из себя пин-код, то лучше использовать подход KEK(Key Encryption Key) + DEK(Data Encryption Key), при котором создается ключ для шифрования данных и он дополнительно шифруется на пароле пользователя. При таком подходе в случае изменения секрета необходимо будет только перешифровать ключ и не трогать зашифрованные данные пользователя.</p>
+<p>!!! note "Примечание"
+    При подключении библиотеки SQLCipher не забудьте добавить правила в Proguard для коррекной работы приложения.</p>
+<p>Правила для proguard:</p>
+<pre><code>-keep,includedescriptorclasses class net.sqlcipher.** { *; }
+-keep,includedescriptorclasses interface net.sqlcipher.** { *; }
+</code></pre>
+<h2 id="_4">Ссылки</h2>
+<ol>
+<li><a href="https://github.com/sqlcipher/android-database-sqlcipher">GitHub - sqlcipher/android-database-sqlcipher: Android SQLite API based on SQLCipher</a></li>
+<li><a href="https://github.com/OWASP/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#sqlite-databases-encrypted">owasp-mstg/0x05d-Testing-Data-Storage.md at master · OWASP/owasp-mstg</a></li>
+<li><a href="https://cwe.mitre.org/data/definitions/521.html">CWE - CWE-521: Weak Password Requirements (4.6) What is a Data Encryption Key (DEK)</a></li>
+<li><a href="https://www.techopedia.com/definition/5660/data-encryption-key-dek">Definition from Techopedia</a></li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

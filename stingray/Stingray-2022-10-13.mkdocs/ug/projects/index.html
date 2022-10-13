@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Проекты - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Проекты</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Список проектов</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Информация о проекте</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Добавление / редактирование / удаление проекта</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_5" class="nav-link">Список профилей проекта</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_6" class="nav-link">Правила</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_7" class="nav-link">Назначение проектных прав доступа</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Проекты</h1>
+<h2 id="_2">Список проектов</h2>
+<p>На странице <strong>Проекты</strong> указаны все существующие в данной Компании проекты и их профили сканирования.</p>
+<figure markdown>
+![](img/18.png)
+</figure>
+
+<p>Для каждого проекта отображаются его название, имя пакета (package name) и архитектура приложения. На данной странице можно получить краткую информацию о существующих профилях проекта, количестве найденных дефектов за все время существования проекта, количестве проведенных сканирований, дате последнего сканирования и о количестве включенных модулей. </p>
+<p>Также можно добавить новый проект или добавить новый профиль сканирования для существующего проекта.</p>
+<p>По нажатию на имя проекта открывается страница проекта с общей информацией и тремя вкладками: <strong>Профили</strong>, <strong>Правила</strong> и <strong>Доступ</strong>.</p>
+<h2 id="_3">Информация о проекте</h2>
+<p>В верхней части страницы проекта представлена общая информация по проекту, включающая:</p>
+<ul>
+<li>Аватар проекта.</li>
+<li>Название проекта.</li>
+<li>Описание проекта.</li>
+<li>Название пакета.</li>
+<li>Количество сканирований в рамках проекта.</li>
+<li>Архитектура проекта (Android или iOS).</li>
+</ul>
+<figure markdown>
+![](img/19.png)
+</figure>
+
+<h2 id="_4">Добавление / редактирование / удаление проекта</h2>
+<p>Для работы с проектами необходимо выбрать пункт <strong>Проекты</strong> в основном меню, расположенном в верхней части экрана.</p>
+<figure markdown>
+![](img/20.png)
+</figure>
+
+<p>Для добавления нового проекта нажмите на кнопку <strong>Добавить проект</strong> справа на странице <strong>Проекты</strong>.</p>
+<p>В появившемся окне <strong>Добавление проекта</strong> введите название проекта, его краткое описание и архитектуру (Android/iOS). Также в соответствующем поле можно указать имя сканируемого пакета (приложения). Если оставить это поле пустым, оно будет автоматически заполнено после первого сканирования. При выборе опции <strong>Скопировать профили из существующего проекта</strong> в появившемся поле <strong>Проект для копирования</strong> можно выбрать уже существующий в компании проект. Это позволит создать новый проект вместе с уже существующими и настроенными в выбранном для копирования проекте профилями и избежать их повторного добавления и настройки в новом проекте.  </p>
+<p>Нажмите кнопку <strong>Добавить</strong> в правом нижнем углу окна. Вновь созданный проект появится на странице <strong>Проекты</strong>.</p>
+<figure markdown>
+![](img/21.png)
+</figure>
+
+<p>Для редактирования кликните мышкой имя проекта на странице <strong>Проекты</strong>.</p>
+<p>На открывшейся странице проекта нажмите кнопку <strong>Изменить</strong>:</p>
+<figure markdown>
+![](img/22.png)
+</figure>
+
+<p>В появившемся окне <strong>Изменение данных проекта</strong> можно отредактировать следующие параметры:</p>
+<ul>
+<li>В поле <strong>Название</strong> отредактировать имя проекта.</li>
+<li>Изменить описание проекта в соответствующем поле.</li>
+<li>Изменить имя пакета в соответствующем поле.</li>
+</ul>
+<figure markdown>
+![](img/23.png)
+</figure>
+
+<p>После редактирования информации проекта нажмите кнопку <strong>Обновить</strong> в правом нижнем углу окна.</p>
+<p>Изменить аватар проекта можно, кликнув мышкой текущий аватар и выбрав файл с картинкой для нового.</p>
+<p>Также на странице проекта можно его удалить. Для этого нажмите кнопку <strong>Удалить</strong> в правой части экрана и подтвердите это действие в появившемся диалоговом окне.</p>
+<figure markdown>
+![](img/24.png)
+</figure>
+
+<h2 id="_5">Список профилей проекта</h2>
+<p>На вкладке <strong>Профили</strong> доступно управление профилями сканирования, включенными в данный проект. Доступен просмотр и добавление нового профиля сканирования. Более подробная информация о работе с профилями приведена в разделе «<a href="../profile/">Профили</a>».</p>
+<figure markdown>
+![](img/25.png)
+</figure>
+
+<h2 id="_6">Правила</h2>
+<p>На вкладке <strong>Правила</strong> доступно управление правилами анализа уязвимостей, которые применяются для данного проекта. Порядок работы с правилами описан в разделе «<a href="../pravila/">Правила</a>».</p>
+<figure markdown>
+![](img/26.png)
+</figure>
+
+<h2 id="_7">Назначение проектных прав доступа</h2>
+<p>На вкладке <strong>Доступ</strong> осуществляется назначение проектных прав доступа как для отдельных пользователей, так и для групп. Более подробная информация о ролевой модели приложения приведена в разделе «<a href="../../ag/polzovateli/">Пользователи, группы, проекты</a>».</p>
+<figure markdown>
+![](img/27.png)
+</figure></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

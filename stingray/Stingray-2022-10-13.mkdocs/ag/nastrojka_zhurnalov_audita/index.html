@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Настройка журналов аудита - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../integraciya_s_google_play/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Настройка журналов аудита</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Журналы аудита</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Управление журналами аудита</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Настройка журналов аудита</h1>
+<h2 id="_2">Журналы аудита</h2>
+<p>Журналы аудита располагаются в директории, в которой расположены конфигурационные файлы, созданные после запуска Wizard (см. раздел «<a href="../ustanovka_stingray/">Установка Stingray</a>» Руководства по установке и интеграции), в общем случае (по умолчанию):</p>
+<pre><code>&lt;path_to_config_directory&gt;/logs/audit.log
+</code></pre>
+<h2 id="_3">Управление журналами аудита</h2>
+<p>Управление журналами аудита производится во время первоначальной установки системы и включает в себя следующие пункты:</p>
+<ul>
+<li>Настройка включения аудита.</li>
+<li>Настройка количества записей в одном файле лога.</li>
+<li>Настройка количества хранимых файлов лога.</li>
+</ul>
+<h3 id="_4">События аудита</h3>
+<p>События аудита логируются при каждом изменении базы данных в случае любого изменения:</p>
+<pre><code>2021-02-07 21:54:38.364420 Process ID: 39 Event ID: 7, Event Name: Update Record,
+Host: http://localhost:4200, User: admin, Args: {'table': 'User', 'id': 1,
+'fields': {'language': {'before': 'en', 'after': 'ru'}}}
+</code></pre>
+<p>Параметры, представленные в каждой записи:</p>
+<ul>
+<li>Время события — время произошедшего события, в формате YYYY-MM-DD h:m:s (год-месяц-день часы:минуты:секунды).</li>
+<li>Идентификатор процесса — идентификатор процесса, от которого произошло событие, внутри системы.</li>
+<li>Идентификатор события — цифровой идентификатор события.</li>
+<li>Имя события — описание события в человеко-читаемом формате.</li>
+<li>Хост — имя хоста, от которого пришел запрос.</li>
+<li>Имя пользователя — пользователь, от имени которого пришел запрос.</li>
+<li>Аргументы запроса — переданные аргументы запроса, определяющие состояние до и после обновления/изменения/удаления и несущие другой информативный характер.</li>
+</ul>
+<p>Перечень всех событий и их описание:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">ID</th>
+<th>Название</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td>Login Success</td>
+<td>Событие успешного входа в систему</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>Login Fail</td>
+<td>Неуспешная попытка входа в систему</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>Logout</td>
+<td>Событие выхода из системы</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>Bad Request</td>
+<td>Событие, определяющее неправильное обращение к системе. В информации события указывается код ошибки, которую вернул сервер. Включает в себя события попытки доступа неавторизованного пользователя к ресурсам (код ошибки 401), попытки доступа к ресурсам, для которых у пользователя нет прав (код ошибки 403), а также неверно сформированные запросы (код ошибки 400) и т. д.</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>Server Error</td>
+<td>Событие об ошибке сервера с информацией о причине возникновения ошибки</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td>New Record</td>
+<td>Создание нового элемента в системе. Список возможных элементов, к которым применяется аудит, указан в таблице ниже</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td>Update Record</td>
+<td>Изменение элемента в системе. Логируется старое и новое значение элемента. Список возможных элементов, к которым применяется аудит, указан в таблице ниже</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td>Delete Record</td>
+<td>Удаление элемента в системе. Список возможных элементов, к которым применяется аудит, указан в таблице ниже</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td>New Related Record</td>
+<td>Событие создания новой связанной сущности. В системе присутствует иерархия сущностей и при явном добавлении одного элемента может создаваться несколько дочерних.<br>Для разделения событий создания основных и вложенных сущностей используются различные типы событий</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td>Delete Related Record</td>
+<td>Событие удаления связанной сущности. В системе присутствует иерархия сущностей и при явном удалении одного элемента может удаляться несколько дочерних. Для разделения событий удаления основных и вложенных сущностей используются различные типы событий</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td>Change Password</td>
+<td>Событие смены пароля пользователей</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td>Dast Action</td>
+<td>Событие совершения операций со сканированиями (запуск, остановка, завершение сканирования)</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td>Testcase Action</td>
+<td>Событие совершения операций с автотестами (запуск, остановка, завершение записи автотеста)</td>
+</tr>
+</tbody>
+</table>
+<p>Список элементов, к которым применяются события создания/удаления/модификации:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">№</th>
+<th>Модель в БД</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td>stingray_user</td>
+<td>Пользователи системы</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td>stingray_project</td>
+<td>Проекты</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td>stingray_profile</td>
+<td>Профили</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td>stingray_dast</td>
+<td>Сканирования</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td>stingray_dastIssue</td>
+<td>Уязвимости, выявленные в ходе сканирования</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td>stingray_DastResult</td>
+<td>Собранные в результате проведения сканирования данные</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td>stingray_ProjectIssue</td>
+<td>Сущность, связывающая уязвимости между сканированиями</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td>stingray_TestCase</td>
+<td>Автотесты, записываемые внутри системы</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td>stingray_Rule</td>
+<td>Правила поиска уязвимостей</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td>stingray_RuleModule</td>
+<td>Связка правил поиска уязвимостей с модулями для поиска</td>
+</tr>
+<tr>
+<td style="text-align: center;">11</td>
+<td>stingray_RuleExpression</td>
+<td>Связка правил поиска уязвимостей со строками поиска</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td>stingray_Expression</td>
+<td>Связка правил поиска уязвимостей с возможными местами поиска</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td>stingray_Injection</td>
+<td>Строки поиска для определения чувствительной информации</td>
+</tr>
+<tr>
+<td style="text-align: center;">14</td>
+<td>stingray_Settings</td>
+<td>Настройки системы</td>
+</tr>
+<tr>
+<td style="text-align: center;">15</td>
+<td>stingray_RequirementGroup</td>
+<td>Стандарты и категории внутри стандартов</td>
+</tr>
+<tr>
+<td style="text-align: center;">16</td>
+<td>stingray_Requirement</td>
+<td>Требования внутри стандартов</td>
+</tr>
+</tbody>
+</table></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

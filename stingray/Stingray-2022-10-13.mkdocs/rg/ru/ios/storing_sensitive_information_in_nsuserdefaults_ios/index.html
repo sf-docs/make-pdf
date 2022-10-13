@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>Хранение sensitive-информации в NSUserDefaults - Stingray</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#sensitive-nsuserdefaults" class="nav-link">Хранение sensitive-информации в NSUserDefaults</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Рекомендации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_6" class="nav-link">Ссылки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="sensitive-nsuserdefaults">Хранение sensitive-информации в NSUserDefaults</h1>
+<table class='noborder'>
+    <colgroup>
+      <col/>
+      <col/>
+    </colgroup>
+    <tbody>
+      <tr>
+        <td rowspan="2"><img src="../../../img/defekt_srednij.png"/></td>
+        <td>Критичность:<strong> СРЕДНИЙ</strong></td>
+      </tr>
+      <tr>
+        <td>Способ обнаружения:<strong> DAST, ФАЙЛЫ ПРИЛОЖЕНИЯ</strong></td>
+      </tr>
+    </tbody>
+</table>
+
+<h2 id="_1">Описание</h2>
+<p>Приложение хранит чувствительную информацию в приватном файле внутри директории приложения.</p>
+<p>Для того, чтобы понять, какие именно данные необходимо защищать, прежде всего необходимо определить, какие данные обрабатывает и хранит приложение и какая часть этой информации считается конфиденциальной. Как правило, в таких случаях полагаются на законодательство и здравый смысл. Нет смысла защищать шифрованием абсолютно всю информацию, которую хранит приложение — это может повлиять на скорость и стабильность работы. Вместо этого следует однозначно определить, какие именно данные для приложения или компании являются конфиденциальными, и сосредоточить свое внимание именно на этих данных.</p>
+<p>Принято считать, что необходимо хранить как можно меньше конфиденциальных данных в локальном хранилище (внутреннем или внешнем). Однако в большинстве случаев хранения такой информации избежать не удастся. Например, с точки зрения удобства использования не стоит заставлять пользователя вводить сложный пароль при каждом запуске приложения. Большинство приложений должны локально кэшировать какой-либо токен аутентификации. Персонально идентифицируемая информация (PII) и другие типы конфиденциальных данных также могут быть сохранены, если этого требует конкретный сценарий.</p>
+<p>Приложение может хранить данные в различных форматах, одним из которых является NSUserDefaults.</p>
+<p>NSUserDefaults предназначен для хранения относительно небольших объемов часто запрашиваемых и редко модифицируемых данных. Другие способы использования могут привести к медленной работе или большему потреблению памяти, чем более подходящие решения.</p>
+<p>Хранение чувствительных данных при помощи механизма NSUserDefaults в открытом доступе не рекомендуется. Так как в физическом представлении это просто файл в файловой системе устройства, расположенный внутри директории приложения по относительному пути <code>/Library/Preferences/com.yourcompany.appName.plist</code>. Значение из этого файла может быть получено через локальный или облачный бекапы, а также при помощи эксплуатации различных уязвимостей.</p>
+<p>!!! note "Внимание!"
+    Очень часто ошибочно считается, что данные, которые хранятся во внутренней директории приложения, уже защищены при помощи механизма песочницы и злоумышленник до них не доберется. Существует большое количество способов, начиная от простого локального или облачного бекапа приложения и заканчивая физическим доступом к устройству и эксплуатации различных уязвимостей. <strong>Информация, размещенная в открытом виде внутри директории приложения, не защищена!</strong></p>
+<h2 id="_2">Рекомендации</h2>
+<p>Любую чувствительную информацию, которая хранится на устройстве, необходимо шифровать. Это можно сделать самыми разными способами и один из таких способов — это шифрование на основе ключа, полученного из данных пользователя (пароля, пин-кода и т. д.), при помощи алгоритмов усиления ключа (<a href="https://en.wikipedia.org/wiki/Key_stretching">Key Stretching</a>). Это позволяет получить ключ шифрования из достаточно простого пароля, применяя к нему несколько раз функцию хеширования вместе с солью. Соль — это некая последовательность случайных данных. Распространенной ошибкой является исключение соли из алгоритма. Соль дает ключу намного большую энтропию. Без неё намного проще получить/восстановить/подобрать ключ. Тем более, без использования соли два одинаковых пароля будут иметь одинаковое значение хеша и, соответственно, одинаковое окончательное значение ключа шифрования.</p>
+<p>При этом, поскольку используется алгоритм усиления ключа, нет необходимости его где-то хранить. Каждый раз, когда возникнет необходимость в ключе, достаточно задействовать данные пользователя для его генерации.</p>
+<p>Для шифрования и дешифрования используем функцию <code>CCCrypt</code> с помощью <code>kCCEncrypt</code> или <code>kCCDecrypt</code>. Поскольку применяется блочный шифр, необходимо дополнить сообщение, если оно не соответствует кратности размера блока. Используя параметр <code>KCCOptionPKCS7Padding</code>, определяем тип дополнения, как PKCS7:</p>
+<h3 id="_3">Шифрование</h3>
+<pre><code>class func encryptData(_ clearTextData : Data, withPassword password : String) -&gt; Dictionary&lt;String, Data&gt;
+    {
+        var setupSuccess = true
+        var outDictionary = Dictionary&lt;String, Data&gt;.init()
+        var key = Data(repeating:0, count:kCCKeySizeAES256)
+        var salt = Data(count: 8)
+        salt.withUnsafeMutableBytes { (saltBytes: UnsafeMutablePointer&lt;UInt8&gt;) -&gt; Void in
+            let saltStatus = SecRandomCopyBytes(kSecRandomDefault, salt.count, saltBytes)
+            if saltStatus == errSecSuccess
+            {
+                let passwordData = password.data(using:String.Encoding.utf8)!
+                key.withUnsafeMutableBytes { (keyBytes : UnsafeMutablePointer&lt;UInt8&gt;) in
+                    let derivationStatus = CCKeyDerivationPBKDF(CCPBKDFAlgorithm(kCCPBKDF2), password, passwordData.count, saltBytes, salt.count, CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA512), 14271, keyBytes, key.count)
+                    if derivationStatus != Int32(kCCSuccess)
+                    {
+                        setupSuccess = false
+                    }
+                }
+            }
+            else
+            {
+                setupSuccess = false
+            }
+        }
+
+        var iv = Data.init(count: kCCBlockSizeAES128)
+        iv.withUnsafeMutableBytes { (ivBytes : UnsafeMutablePointer&lt;UInt8&gt;) in
+            let ivStatus = SecRandomCopyBytes(kSecRandomDefault, kCCBlockSizeAES128, ivBytes)
+            if ivStatus != errSecSuccess
+            {
+                setupSuccess = false
+            }
+        }
+
+        if (setupSuccess)
+        {
+            var numberOfBytesEncrypted : size_t = 0
+            let size = clearTextData.count + kCCBlockSizeAES128
+            var encrypted = Data.init(count: size)
+            let cryptStatus = iv.withUnsafeBytes {ivBytes in
+                encrypted.withUnsafeMutableBytes {encryptedBytes in
+                clearTextData.withUnsafeBytes {clearTextBytes in
+                    key.withUnsafeBytes {keyBytes in
+                        CCCrypt(CCOperation(kCCEncrypt),
+                                CCAlgorithm(kCCAlgorithmAES),
+                                CCOptions(kCCOptionPKCS7Padding + kCCModeCBC),
+                                keyBytes,
+                                key.count,
+                                ivBytes,
+                                clearTextBytes,
+                                clearTextData.count,
+                                encryptedBytes,
+                                size,
+                                &amp;numberOfBytesEncrypted)
+                        }
+                    }
+                }
+            }
+            if cryptStatus == Int32(kCCSuccess)
+            {
+                encrypted.count = numberOfBytesEncrypted
+                outDictionary["EncryptionData"] = encrypted
+                outDictionary["EncryptionIV"] = iv
+                outDictionary["EncryptionSalt"] = salt
+            }
+        }
+
+        return outDictionary;
+    }
+</code></pre>
+<p>И, соответственно, функция расшифровки:</p>
+<h3 id="_4">Дешифрование</h3>
+<pre><code>class func decryp(fromDictionary dictionary : Dictionary&lt;String, Data&gt;, withPassword password : String) -&gt; Data
+    {
+        var setupSuccess = true
+        let encrypted = dictionary["EncryptionData"]
+        let iv = dictionary["EncryptionIV"]
+        let salt = dictionary["EncryptionSalt"]
+        var key = Data(repeating:0, count:kCCKeySizeAES256)
+        salt?.withUnsafeBytes { (saltBytes: UnsafePointer&lt;UInt8&gt;) -&gt; Void in
+            let passwordData = password.data(using:String.Encoding.utf8)!
+            key.withUnsafeMutableBytes { (keyBytes : UnsafeMutablePointer&lt;UInt8&gt;) in
+                let derivationStatus = CCKeyDerivationPBKDF(CCPBKDFAlgorithm(kCCPBKDF2), password, passwordData.count, saltBytes, salt!.count, CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA512), 14271, keyBytes, key.count)
+                if derivationStatus != Int32(kCCSuccess)
+                {
+                    setupSuccess = false
+                }
+            }
+        }
+
+        var decryptSuccess = false
+        let size = (encrypted?.count)! + kCCBlockSizeAES128
+        var clearTextData = Data.init(count: size)
+        if (setupSuccess)
+        {
+            var numberOfBytesDecrypted : size_t = 0
+            let cryptStatus = iv?.withUnsafeBytes {ivBytes in
+                clearTextData.withUnsafeMutableBytes {clearTextBytes in
+                encrypted?.withUnsafeBytes {encryptedBytes in
+                    key.withUnsafeBytes {keyBytes in
+                        CCCrypt(CCOperation(kCCDecrypt),
+                                CCAlgorithm(kCCAlgorithmAES128),
+                                CCOptions(kCCOptionPKCS7Padding + kCCModeCBC),
+                                keyBytes,
+                                key.count,
+                                ivBytes,
+                                encryptedBytes,
+                                (encrypted?.count)!,
+                                clearTextBytes,
+                                size,
+                                &amp;numberOfBytesDecrypted)
+                        }
+                    }
+                }
+            }
+            if cryptStatus! == Int32(kCCSuccess)
+            {
+                clearTextData.count = numberOfBytesDecrypted
+                decryptSuccess = true
+            }
+        }
+
+        return decryptSuccess ? clearTextData : Data.init(count: 0)
+    }
+</code></pre>
+<p>Для проверки того, что эти функции работают и шифрование/расшифровка проходят корректно, можно воспользоваться простым примером:</p>
+<h3 id="_5">Пример</h3>
+<pre><code>class func encryptionTest()
+    {
+        let clearTextData = "some clear text to encrypt".data(using:String.Encoding.utf8)!
+        let dictionary = encryptData(clearTextData, withPassword: "123456")
+        let decrypted = decryp(fromDictionary: dictionary, withPassword: "123456")
+        let decryptedString = String(data: decrypted, encoding: String.Encoding.utf8)
+        print("decrypted cleartext result - ", decryptedString ?? "Error: Could not convert data to string")
+    }
+</code></pre>
+<p>В этом примере мы упаковываем всю необходимую информацию и возвращаем ее в виде словаря, чтобы впоследствии все части могли использоваться для успешного дешифрования данных. Для этого необходимо хранить IV и соль либо в Keychain, либо на сервере.</p>
+<h2 id="_6">Ссылки</h2>
+<ol>
+<li><a href="https://developer.apple.com/">https://developer.apple.com/</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Key_stretching">https://en.wikipedia.org/wiki/Key_stretching</a> </li>
+<li><a href="https://en.wikipedia.org/wiki/PBKDF2">https://en.wikipedia.org/wiki/PBKDF2</a> </li>
+<li><a href="https://en.wikipedia.org/wiki/Padding_(cryptography)#PKCS7">https://en.wikipedia.org/wiki/Padding_(cryptography)#PKCS7</a> </li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

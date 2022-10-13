@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Установка Stingray - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../trebovaniya_k_infrastrukture/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../zapusk_stingray/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#stingray" class="nav-link">Установка Stingray</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Подготовка инфраструктуры</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Настройка системы</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="stingray">Установка Stingray</h1>
+<p>!!! note "Примечание"
+    Все действия, описанные в данном разделе, необходимо производить от пользователя root.</p>
+<h2 id="_1">Подготовка инфраструктуры</h2>
+<ol>
+<li>
+<p>Необходимо убедиться, что CPU имеет поддержку технологии аппаратной виртуализации (Intel Virtualization Technology (VT, VT-x, vmx) или AMD Virtualization (AMD-V, SVM)), выполнив команды:</p>
+<p>=== "Ubuntu"
+        sudo apt-get install cpu-checker
+        kvm-ok</p>
+</li>
+<li>
+<p>Установить требуемые пакеты:</p>
+<p>=== "Ubuntu Server 16"
+        sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
+=== "Ubuntu Server 18/20"
+        sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virt-manager
+=== "RHEL/CentOS"
+        sudo yum install qemu-kvm libvirt libvirt-python3 libguestfs-tools virt-install</p>
+</li>
+<li>
+<p>Установите docker и docker-compose, если это не было сделано заранее. Рекомендации по установке можно найти на официальном сайте:</p>
+<ul>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">https://docs.docker.com/install/linux/docker-ce/ubuntu/</a></li>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">https://docs.docker.com/compose/install/</a></li>
+</ul>
+</li>
+<li>
+<p>Создайте группы и пользователей.</p>
+<pre><code>groupadd --system --gid 171 kvm
+groupadd --gid 1717 emulator
+useradd --uid 1717 --gid emulator --groups kvm emulator
+</code></pre>
+<p>Если группа kvm уже существует, то вместо первой строки выполнить следующее:</p>
+<pre><code>groupmod --gid 171 kvm
+chgrp kvm /dev/kvm
+</code></pre>
+</li>
+</ol>
+<h3 id="docker-ycr">Установка при наличии доступа к внешнему репозиторию docker-образов YCR</h3>
+<ol>
+<li>
+<p>Авторизуйте docker на доступ к репозиторию YCR docker-образов:</p>
+<pre><code>cat stingray-numeric_id.json | docker login --username json_key --password-stdin cr.yandex
+</code></pre>
+<p>Ключ <code>stingray-numeric_id.json</code> для подключения к Yandex Container Registry (YCR) docker-образам компании Stingray Technologies предоставляется при покупке лицензии Stingray.</p>
+</li>
+<li>
+<p>Загрузите специальный docker-образ для подготовки конфигурационных файлов командой:</p>
+<pre><code>docker pull cr.yandex/crp8idtsajke3lbauqel/stingray/wizard:release-x
+</code></pre>
+<p>!!! note "Примечание"
+    Версия релиза указывается в формате <code>release-x</code>, где <code>x</code> — это текущая версия (например, 2022.6.1). Пожалуйста, уточняйте эту информацию у вендора или на официальном сайте.</p>
+</li>
+</ol>
+<h3 id="docker-ycr_1">Установка без наличия доступа к внешнему репозиторию docker-образов YCR</h3>
+<ol>
+<li>
+<p>При отсутствии доступа к внешнему репозиторию docker-образов, образы поставляются в виде выгруженных tar-архивов. Для доступа к данным архивам необходимо запросить их у поставщика продукта.</p>
+</li>
+<li>
+<p>После того, как архивы загружены и перенесены на сервер Stingray необходимо их импортировать в docker. Для этого выполните следующую команду для всех полученных архивов:</p>
+<pre><code>docker load -i &lt;archive_name&gt;.tar
+</code></pre>
+</li>
+</ol>
+<h2 id="_2">Настройка системы</h2>
+<ol>
+<li>
+<p>Создайте директорию, где будут располагаться конфигурационные файлы Stingray, к примеру директорию <code>/opt/stingray</code>.</p>
+</li>
+<li>
+<p>При необходимости использования HTTPS соединения создайте директорию, где будут располагаться файл полной цепочки сертификатов (например, <code>/opt/certs</code>) и закрытого ключа, скопируйте файлы сертификата и закрытого ключа и назовите их в соответствии с требованиями:</p>
+<ul>
+<li><strong><em>fullchain.pem</em></strong> — полная цепочка сертификатов;</li>
+<li><strong><em>privkey.pem</em></strong> — приватный ключ.</li>
+</ul>
+</li>
+<li>
+<p>Запустите docker-контейнер для подготовки конфигурации.</p>
+<p>Пример запуска контейнера с двумя подключенными volumes для файлов конфигурации и с сертификатами (при доступе по HTTPS):</p>
+<pre><code>docker run -i -t -v /opt/stingray:/opt/docker-files -v /opt/certs:/opt/nginx/certs cr.yandex/crp8idtsajke3lbauqel/stingray/wizard:release-x
+</code></pre>
+<p>!!! note "Примечание"
+    Версия релиза указывается в формате <code>release-x</code>, где <code>x</code> — это текущая версия (например, 2022.6.1). Пожалуйста, уточняйте эту информацию у вендора или на официальном сайте.</p>
+<p>Пример запуска контейнера с одним volume для файлов конфигурации (при доступе по HTTP):</p>
+<pre><code>docker run -i -t -v /opt/stingray:/opt/docker-files cr.yandex/crp8idtsajke3lbauqel/stingray/wizard:release-x
+</code></pre>
+<p>!!! note "Примечание"
+    Версия релиза указывается в формате <code>release-x</code>, где <code>x</code> — это текущая версия (например, 2022.6.1). Пожалуйста, уточняйте эту информацию у вендора или на официальном сайте.</p>
+</li>
+</ol>
+<p>После запуска контейнера в интерактивном режиме необходимо заполнить ряд параметров.</p>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Описание</th>
+<th>Значение по умолчанию</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STINGRAY_DOMAIN</td>
+<td>Домен, на котором будет располагаться система для корректной настройки маршрутизации и обращения UI к нужному серверу</td>
+<td>saas.stingray-mobile.ru</td>
+</tr>
+<tr>
+<td>IP_EXTERNAL</td>
+<td>IP сервера, на который устанавливается Stingray</td>
+<td>0.0.0.0</td>
+</tr>
+<tr>
+<td>USE_SSL</td>
+<td>Параметр, определяющий, будет ли проходить соединение через протокол http или https. При указании «1» приложение конфигурируется для использования 443 порта и проводит настройку для соединения по HTTPS (копируются из второго volume с сертификатами)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>POSTGRES_USER</td>
+<td>Пользователь, с которым будет запущена база данных Postgres</td>
+<td>stingray</td>
+</tr>
+<tr>
+<td>POSTGRES_PASSWORD</td>
+<td>Пароль пользователя, с которым будет запущена база данных Postgres</td>
+<td>P@ssw0rd</td>
+</tr>
+<tr>
+<td>RABBITMQ_DEFAULT_USER</td>
+<td>Пользователь, с которым будет запущен брокер RabbitMQ</td>
+<td>stingray</td>
+</tr>
+<tr>
+<td>RABBITMQ_DEFAULT_PASS</td>
+<td>Пароль пользователя, с которым будет запущен брокер RabbitMQ</td>
+<td>P@ssw0rd</td>
+</tr>
+<tr>
+<td>STINGRAY_DEBUG</td>
+<td>Запустить сервер с расширенным выводом ошибок</td>
+<td>0</td>
+</tr>
+<tr>
+<td>STINGRAY_DOCKER_LOGIN</td>
+<td>Флаг, определяющий сетевую доступность от сервера Stingray до внешнего хранилища docker-образов. Данная функциональность необходима для динамического создания сканирующих агентов и загрузки последней актуальной версии при обновлении системы. При выставлении значения «0» — необходимо при обновлении системы вручную загрузить последнюю версию образа</td>
+<td>0</td>
+</tr>
+<tr>
+<td>STINGRAY_LANGUAGE_CODE</td>
+<td>Язык системы по умолчанию. Влияет на язык swagger и язык по умолчанию для вновь создаваемых языков</td>
+<td>ru</td>
+</tr>
+<tr>
+<td>STINGRAY_TIME_ZONE</td>
+<td>Временная зона для корректного отображения времени</td>
+<td>Europe/Moscow</td>
+</tr>
+<tr>
+<td>STINGRAY_ACCESS_TOKEN_LIFETIME</td>
+<td>Время жизни access_token в минутах</td>
+<td>60</td>
+</tr>
+<tr>
+<td>STINGRAY_REFRESH_TOKEN_LIFETIME</td>
+<td>Время жизни refresh_token в минутах</td>
+<td>1440</td>
+</tr>
+<tr>
+<td>STINGRAY_CI_TOKEN_LIFETIME</td>
+<td>Время жизни токена для интеграции в CI/CD</td>
+<td>525600</td>
+</tr>
+<tr>
+<td>STINGRAY_COMPANY_NAME</td>
+<td>Название компании</td>
+<td>Company Name</td>
+</tr>
+<tr>
+<td>STINGRAY_COMPANY_DESCRIPTION</td>
+<td>Описание компании</td>
+<td>Company Description</td>
+</tr>
+<tr>
+<td>STINGRAY_SUPERUSER_USERNAME</td>
+<td>Имя пользователя с ролью Супер администратора</td>
+<td>admin</td>
+</tr>
+<tr>
+<td>STINGRAY_SUPERUSER_PASSWORD</td>
+<td>Пароль пользователя с ролью Супер администратора</td>
+<td>admin</td>
+</tr>
+<tr>
+<td>STINGRAY_CREATE_SAMPLES</td>
+<td>Флаг, определяющий, нужно ли создавать сущности по умолчанию, которые задаются далее (проекты/профили, пользователей, сканирующие агенты/компания)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>STINGRAY_ADMIN_USERNAME</td>
+<td>Имя пользователя с ролью Администратора компании</td>
+<td>company_admin</td>
+</tr>
+<tr>
+<td>STINGRAY_ADMIN_PASSWORD</td>
+<td>Пароль пользователя с ролью Администратора компании</td>
+<td>123</td>
+</tr>
+<tr>
+<td>STINGRAY_ADMIN_FIRSTNAME</td>
+<td>Имя Администратора</td>
+<td>FirstName</td>
+</tr>
+<tr>
+<td>STINGRAY_ADMIN_LASTNAME</td>
+<td>Фамилия Администратора</td>
+<td>LastName</td>
+</tr>
+<tr>
+<td>STINGRAY_ENGINE_NAME_ANDROID</td>
+<td>Имя агента для Android Engine</td>
+<td>stingray-engine</td>
+</tr>
+<tr>
+<td>STINGRAY_ENGINE_NAME_IOS</td>
+<td>Имя агента для iOS Engine</td>
+<td>stingray-engine-ios</td>
+</tr>
+<tr>
+<td>STINGRAY_PROJECT_NAME_ANDROID</td>
+<td>Имя проекта, создаваемого по умолчанию для Android проекта</td>
+<td>Project Name Android</td>
+</tr>
+<tr>
+<td>STINGRAY_PROJECT_DESCRIPTION_ANDROID</td>
+<td>Описание проекта, создаваемого по умолчанию для Android проекта</td>
+<td>Project Description Android</td>
+</tr>
+<tr>
+<td>STINGRAY_PROJECT_NAME_IOS</td>
+<td>Имя проекта, создаваемого по умолчанию для iOS проекта</td>
+<td>Project Name iOS</td>
+</tr>
+<tr>
+<td>STINGRAY_PROJECT_DESCRIPTION_IOS</td>
+<td>Описание проекта, создаваемого по умолчанию для iOS проекта</td>
+<td>Project Description iOS</td>
+</tr>
+<tr>
+<td>STINGRAY_PROFILE_NAME_ANDROID</td>
+<td>Имя профиля, создаваемого по умолчанию для Android проекта</td>
+<td>Profile Name Android</td>
+</tr>
+<tr>
+<td>STINGRAY_PROFILE_DESCRIPTION_ANDROID</td>
+<td>Описание профиля, создаваемого по умолчанию для Android проекта</td>
+<td>Profile Description Android</td>
+</tr>
+<tr>
+<td>STINGRAY_PROFILE_NAME_IOS</td>
+<td>Имя профиля, создаваемого по умолчанию для iOS проекта</td>
+<td>Profile Name iOS</td>
+</tr>
+<tr>
+<td>STINGRAY_PROFILE_DESCRIPTION_IOS</td>
+<td>Описание профиля, создаваемого по умолчанию для iOS проекта</td>
+<td>Profile Description iOS</td>
+</tr>
+<tr>
+<td>STINGRAY_AUDIT_USE</td>
+<td>Включение или выключение аудита событий в системе</td>
+<td>1</td>
+</tr>
+<tr>
+<td>STINGRAY_AUDIT_MAX_LENGTH</td>
+<td>Максимальное количество записей в одном файле. После  превышения заданного количества к концу файла добавляется постфикс (.1, .2 и  т. д.), а новая информация записывается в стандартный файл без постфикса</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>STINGRAY_AUDIT_FILE_COUNT</td>
+<td>Количество файлов, которое будет храниться в системе. При превышении количества файлов старые удаляются</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p>В результате выполнения в директории <code>/opt/stingray</code> будут созданы все необходимые файлы для запуска.</p>
+<h3 id="_3">Список контейнеров</h3>
+<table>
+<thead>
+<tr>
+<th>Имя контейнера</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stingray-nginx</td>
+<td>Входная точка для обращений к backend и UI. Выполняет функции reverse-proxy</td>
+</tr>
+<tr>
+<td>stingray-backend</td>
+<td>Backend приложения, отвечает за основную логику обработки пользовательских запросов и выдачу результатов</td>
+</tr>
+<tr>
+<td>stingray-rabbitmq</td>
+<td>Менеджер очередей сканирования, управляет очередью сканирования</td>
+</tr>
+<tr>
+<td>stingray-postgres</td>
+<td>База данных</td>
+</tr>
+<tr>
+<td>stingray-ui</td>
+<td>Пользовательский интерфейс</td>
+</tr>
+<tr>
+<td>stingray-redis</td>
+<td>Redis для промежуточного хранения оперативной информации</td>
+</tr>
+<tr>
+<td>engine-android</td>
+<td>Сканирующий модуль для Android-проектов. Название контейнера может быть произвольным</td>
+</tr>
+<tr>
+<td>engine-ios</td>
+<td>Сканирующий модуль для iOS-проектов. Название контейнера может быть произвольным</td>
+</tr>
+<tr>
+<td>stingray-knowledgebase</td>
+<td>Контейнер, содержащий в себе информацию по устранению уязвимостей и документацию</td>
+</tr>
+<tr>
+<td>stingray-maintenance</td>
+<td>Осуществляет управление контейнерами - проверку статусов, перезагрузку, запуск и остановку</td>
+</tr>
+</tbody>
+</table></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

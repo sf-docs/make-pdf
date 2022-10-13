@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Интеграция с AppStore - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../integraciya_s_firebase/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../integraciya_c_burp_suite/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#appstore" class="nav-link">Интеграция с AppStore</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">Сбор необходимых параметров</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Пример запуска скрипта</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="appstore">Интеграция с AppStore</h1>
+<h2 id="_1">Сбор необходимых параметров</h2>
+<p>Интеграция с AppStore производится с помощью скрипта <a href="https://github.com/Dynamic-Mobile-Security/mdast-cli">mdast_scan.py</a>. Чтобы скачать приложение с AppStore, необходимо располагать учетными данными аккаунта iTunes.</p>
+<p>Для успешной авторизации с использованием аккаунта iTunes необходимо получить и сохранить код двухфакторной аутентификации.</p>
+<p>При первом запуске скрипта с указанием адреса электронной почты и пароля вы столкнетесь с ошибкой авторизации (это ожидаемое и нормальное в данном случае поведение), при этом на ваше устройство придет код двухфакторной аутентификации. </p>
+<figure markdown>
+![](img/15.png)
+</figure>
+
+<p>Необходимо сохранить полученный код. Теперь при запуске скрипта пароль и код двухфакторной аутентификации необходимо передавать в следующем виде:</p>
+<p><code>--appstore_password2FA password2FA</code>, где:</p>
+<ul>
+<li><code>password</code> — пароль;</li>
+<li><code>2FA</code> — код двухфакторной аутентификации.</li>
+</ul>
+<p>Например, если для входа в аккаунт используется пароль <code>P@ssword</code>, а полученный код двухфакторной аутентификации — <code>742877</code>, передаваемый параметр будет выглядеть следующим образом: <code>--appstore_password2FA P@ssword742877</code>.</p>
+<p>Повторное получение кода двухфакторной аутентификации не потребуется в течение следующих 6 месяцев.</p>
+<p>Для запуска сканирования, необходимо указать или <code>appstore_bundle_id</code> или <code>appstore_app_id</code>.</p>
+<p>Чтобы получить параметр <code>appstore_app_id</code>, в браузере перейдите на страницу приложения в AppStore и скопируйте параметр из URL.</p>
+<figure markdown>
+![](img/16.png)
+</figure>
+
+<p>В данном примере <code>appstore_app_id</code> — <code>398129933</code>.</p>
+<p>При запуске скрипта указываются следующие обязательные параметры:</p>
+<ul>
+<li><code>distribution_system appstore</code> — признак того, что приложение скачивается из AppStore;</li>
+<li><code>appstore_bundle_id</code> или <code>appstore_app_id</code>;</li>
+<li><code>appstore_bundle_id</code> — бандл имя приложения в AppStore;</li>
+<li><code>appstore_app_id</code> — идентификатор приложения в AppStore, который можно получить из ссылки приложения в магазине AppStore, взяв числовое значение <code>id</code> нужного приложения: apps.apple.com/app/id<strong>{appstore_app_id}</strong>;</li>
+<li><code>appstore_apple_id</code> — электронная почта аккаунта iTunes;</li>
+<li><code>appstore_password2FA</code> — пароль и код двухфакторной аутентификации аккаунта iTunes.</li>
+</ul>
+<p>Также используя параметр <code>appstore_file_name</code>, можно указать имя, с которым файл будет сохранен (данный параметр не является обязательным).</p>
+<p>!!! note "Примечание"
+    Если вы авторизовались и потеряли код двухфакторной аутентификации, сессия будет оставаться активной в течение одного дня (достаточно <code>appstore_app_id</code> и пароля). Вы не сможете завершить сессию с помощью данного скрипта. Таким образом, чтобы скрипт продолжал корректно работать, необходимо вновь авторизоваться спустя 24 часа с использованием пароля и кода двухфакторной аутентификации.</p>
+<p>!!! note "Примечание"
+    Если при запуске сканирования возникает ошибка, связанная с неправильным apple_id, например: «Вход в App Store». Чтобы открыть «Telegram», войдите с Apple ID, с которым была произведена покупка», обратитесь в службу технической поддержки компании Stingray для согласования Apple ID, с помощью которого будет выполняться интеграция с AppStore, вам будет предложено решение этой проблемы.</p>
+<h2 id="_2">Пример запуска скрипта</h2>
+<p>Чтобы запустить сканирование приложения, скачанного с AppStore, необходимо выполнить следующую команду:</p>
+<pre><code>python mdast_cli/mdast_scan.py \
+  --architecture_id 3 \
+  --profile_id 1246 \
+  --distribution_system appstore \
+  --appstore_app_id 564177498 \
+  --appstore_apple_id ubet******@icloud.com \
+  --appstore_password2FA pass*******31******454 \
+  --url "https://saas.mobile.appsec.world" \
+  --company_id 2 \
+  --token 5d5f6****************2d9f --appstore_file_name my_b3st_4pp
+</code></pre>
+<p>.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

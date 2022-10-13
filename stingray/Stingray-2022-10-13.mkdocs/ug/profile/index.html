@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Профили - Stingray</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">Stingray</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Профили</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Добавление / редактирование / удаление профиля</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Модули</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Стандарты</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Профили</h1>
+<p>По нажатию на имя профиля на странице <strong>Проекты</strong> или на вкладке <strong>Профили</strong> страницы с информацией о проекте открывается страница профиля  с детальной информацией о нем.</p>
+<figure markdown>
+![](img/81.png)
+</figure>
+
+<p>На странице профиля можно получить информацию о настройках модулей сканирования в данном профиле (включить, отключить или настроить их), просмотреть и включить или отключить стандарты безопасности, на соответствие которым будет проверяться анализируемое данным профилем приложение. 
+В верхней части страницы представлена общая информация о профиле:</p>
+<ul>
+<li>Имя профиля.</li>
+<li><strong>Проект</strong>, к которому относится профиль.</li>
+<li><strong>Количество сканирований</strong> в рамках профиля.</li>
+<li><strong>Количество дефектов</strong>, найденных за время существования профиля.</li>
+</ul>
+<p>На странице присутствуют две вкладки: <strong>Модули</strong> и <strong>Стандарты</strong>. Их детальное описание приведено ниже в этом разделе.</p>
+<h2 id="_2">Добавление / редактирование / удаление профиля</h2>
+<p>Профили сканирования относятся к проектам. На странице <strong>Проекты</strong> представлены все существующие в системе проекты и их профили сканирования. Каждый профиль представлен в виде карточки с краткой информацией о нем. Для каждого проекта показан список его профилей. На этой странице можно добавить новый профиль сканирования для существующего проекта или просмотреть информацию о существующих профилях.</p>
+<figure markdown>
+![](img/82.png)
+</figure>
+
+<p>Для добавления нового профиля в проект нажмите кнопку <strong>Добавить профиль</strong> справа в поле проекта. В появившемся окне <strong>Добавить профиль</strong> введите название профиля и его краткое описание, а затем нажмите кнопку <strong>Добавить</strong> в правом нижнем углу окна. Вновь созданный профиль появится в списке профилей проекта.</p>
+<figure markdown>
+![](img/83.png)
+</figure>
+
+<p>Для редактирования или удаления профиля нажмите имя профиля, который необходимо отредактировать или удалить.</p>
+<figure markdown>
+![](img/84.png)
+</figure>
+
+<p>Откроется страница с детальной информацией о профиле.</p>
+<figure markdown>
+![](img/85.png)
+</figure>
+
+<p>Чтобы отредактировать параметры профиля, нажмите кнопку <strong>Изменить</strong> справа вверху. В появившемся окне можно изменить название и описание профиля:</p>
+<figure markdown>
+![](img/86.png)
+</figure>
+
+<p>Чтобы удалить профиль, нажмите кнопку <strong>Удалить</strong> справа вверху и подтвердите это действие нажатием на кнопку <strong>Удалить</strong> в появившемся диалоговом окне.</p>
+<figure markdown>
+![](img/87.png)
+</figure>
+
+<p>Добавление, удаление и редактирование профиля можно осуществить двумя способами. Рассмотрим второй способ.</p>
+<p>На странице <strong>Проекты</strong> показаны имена проектов и список их профилей. По нажатию на имя проекта открывается страница <strong>Проект</strong> с вкладками <strong>Профили</strong>, <strong>Правила</strong> и <strong>Доступ</strong>.</p>
+<figure markdown>
+![](img/88.png)
+</figure>
+
+<p>На вкладке <strong>Профили</strong> можно добавить новый профиль нажатием на кнопку <strong>Добавить профиль</strong>. В появившемся окне <strong>Добавить профиль</strong> введите название профиля и его краткое описание и нажмите кнопку <strong>Добавить</strong> в правом нижнем углу окна. Вновь созданный профиль появится в списке профилей проекта.</p>
+<p>Нажмите карточку профиля в списке профилей, чтобы изменить информацию профиля или удалить профиль. Откроется страница этого профиля. Описание редактирования и удаления профиля на странице профиля приведено выше в этом разделе.</p>
+<h2 id="_3">Модули</h2>
+<p>На данной вкладке представлены настройки модулей для сбора информации о приложении, на основе которой будет произведен дальнейший анализ. На этой вкладке возможно включить или выключить конкретный модуль и провести соответствующие настройки.</p>
+<figure markdown>
+![](img/89.png)
+</figure>
+
+<p>Система включает двадцать модулей сканирования. Список всех модулей для сканирования и сбора информации о приложении представлен на вкладке <strong>Модули</strong> на странице профиля. Из этого списка можно выбрать и настроить те модули, которые будут включены при сканировании приложения с этим профилем. Дальнейший анализ и поиск уязвимостей приложения будет производиться на основе собранных в ходе сканирования данных.</p>
+<p>Для эффективной работы с приложением возможно включить или выключить каждый конкретный модуль и провести соответствующие настройки.</p>
+<p>Включить или выключить модуль можно с помощью селектора, расположенного справа от его названия. У всех включенных модулей селектор находится во включенном положении <img alt="" src="../img/swith_on.png" />, у всех выключенных модулей селектор находится в выключенном положении <img alt="" src="../img/swith_off.png" />. Для изменения статуса модуля с «включен» на «выключен» и наоборот достаточно кликнуть мышкой селектор модуля.</p>
+<p>Каждый модуль имеет набор специфических для него настроек. При выборе модуля из списка модулей в левой части вкладки в правой части вкладки  отображаются его настройки, которые можно изменить и сохранить, нажав кнопку <strong>Изменить</strong> внизу вкладки.</p>
+<figure markdown>
+![](img/90.png)
+</figure>
+
+<p>Настройки для каждого модуля включают:</p>
+<ul>
+<li><strong>Название</strong> модуля.</li>
+<li><strong>Описание</strong>  модуля.</li>
+<li>Список модулей, от которых зависит этот модуль.</li>
+<li><strong>Настройки</strong>, которые можно изменить (если применимо для данного модуля — ряд модулей не имеет изменяемых настроек).</li>
+</ul>
+<p>Работа некоторых модулей зависит от результатов других модулей. Это отмечено в списке модулей в левой части экрана через дополнительную информацию, расположенную снизу имени модуля, см. рис. ниже. Если все «родительские» модули выключены, то зависящий от них модуль также будет автоматически выключен.</p>
+<figure markdown>
+![](img/91.png)
+</figure>
+
+<h2 id="_4">Стандарты</h2>
+<p>На данной вкладке доступно управление стандартами информационной безопасности, на соответствие которым будет проверено анализируемое приложение.</p>
+<p>На вкладке <strong>Стандарты</strong> страницы компании перечислены все стандарты информационной безопасности и входящие в них требования, на соответствие которым можно проверить приложение. Список всех стандартов и требований представлен также на вкладке <strong>Стандарты</strong> на странице профиля. Из этого списка можно выбрать стандарты, на соответствие которым будут проверяться результаты тестирования приложения с этим профилем. Список входящих в стандарт требований представлен на правой части вкладки.</p>
+<p>Система предоставляет возможность включить или выключить проверку на соответствие стандартам информационной безопасности.</p>
+<p>У всех включенных для проверки стандартов селектор находится во включенном положении <img alt="" src="../img/swith_on.png" />, у всех выключенных стандартов селектор находится в выключенном положении <img alt="" src="../img/swith_off.png" />. Для изменения статуса стандарта с «включен» на «выключен» и наоборот достаточно кликнуть мышкой селектор стандарта.</p>
+<figure markdown>
+![](img/92.png)
+</figure></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
