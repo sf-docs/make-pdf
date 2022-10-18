@@ -1,0 +1,253 @@
+site_name: Документация
+nav:
+  - Общая информация:
+    - gi/index.md
+    - gi/o_produkte.md
+    - gi/trebovaniya_k_rabochemu_mestu_polzovatelya.md
+    - gi/osnovnye_ponyatiya.md
+  - Руководство пользователя:
+    - ug/index.md
+    - ug/autentifikaciya_polzovatelya.md
+    - ug/osnovnoe_menu.md
+    - ug/projects.md
+    - ug/pravila.md
+    - ug/profile.md
+    - ug/rezultaty_skanirovanij.md
+    - ug/zapusk_skanirovaniya.md
+    - ug/testcases.md
+    - ug/standarty.md
+    - ug/profil_polzovatelya.md
+    - ag/companies.md
+    - Настройки:
+      - ag/nastrojki.md
+      - ag/polzovateli.md
+      - ag/pravila_analiza_na_urovne_organizacii.md
+      - ag/ustrojstva.md
+      - ag/integracii.md
+    - ug/dokumentaciya_i_rekomendacii.md
+    - Приложения:
+      - ag/prilozhenie_1.md
+      - ag/prilozhenie_2.md
+      - ag/prilozhenie_3.md
+  - Руководство по установке и интеграции:
+    - ag/index.md
+    - ag/trebovaniya_k_infrastrukture.md
+    - ag/ustanovka_stingray.md
+    - ag/zapusk_stingray.md
+    - ag/ostanovka_stingray.md
+    - ag/obnovlenie_sistemy.md
+    - ag/perezagruzka_servera_bez_obnovleniya_stingray.md
+#    - Настройки:
+#      - ag/nastrojki.md
+#      - ag/polzovateli.md
+#      - ag/pravila_analiza_na_urovne_organizacii.md
+#      - ag/ustrojstva.md
+#      - ag/companies.md
+#      - ag/integracii.md
+    - Интеграции системы:
+      - ag/integracii_cherez_rest_api.md
+      - ag/sistemy_ci_cd.md
+#      - ag/integraciya_s_ldap.md
+      - ag/sistema_distribucii_appcenter.md
+      - ag/sistema_distribucii_nexus_repository.md
+      - ag/integraciya_s_firebase.md
+      - ag/integraciya_s_appstore.md
+      - ag/integraciya_c_burp_suite.md
+      - ag/integraciya_s_netsparker.md
+      - ag/integraciya_s_appscreener.md
+      - ag/integraciya_s_oversecured.md
+      - ag/integraciya_s_google_play.md
+      - ag/integraciya_s_rustore.md
+    - Настройка мониторинга:
+      - ag/nastrojka_zhurnalov_audita.md
+  - Рекомендации по безопасной разработке:
+    - rg/index.md
+    # - Общие рекомендации:
+      # - rg/ru/general/using of cryptographic algorithms.md
+    - Рекомендации для Android:
+      - Небезопасное хранение ключевой информации:
+        - rg/ru/android/a_writable_keystore.md
+        - rg/ru/android/a_keystore_with_write_permission_protected_by_a_weak_password.md
+        - rg/ru/android/readable_file_keystore.md
+        - rg/ru/android/a_readable_keystore,_protected_by_a_weak_password,_with_private_keys.md
+        - rg/ru/android/a_readable_keystore,_protected_by_a_weak_password,_with_public_keys.md
+        - rg/ru/android/a_readable_keystore_containing_private_keys_protected_by_a_weak_password.md
+        - rg/ru/android/using_a_file_keystore.md
+        - rg/ru/android/a_keystore,_protected_by_weak_password,_containing_private_keys.md
+        - rg/ru/android/a_keystore,_protected_by_weak_password,_containing_public_keys.md
+        - rg/ru/android/a_keystore_containing_private_keys_protected_by_a_weak_password.md
+      - Передача sensitive-информации в Activity:
+        - rg/ru/android/insecure_transmission_of_sensitive_information_in_activity.md
+        - rg/ru/android/insecure_transmission_of_sensitive_information_in_external_activity.md
+        - rg/ru/android/insecure_transmission_of_sensitive_information_in_private_activity.md
+      - Передача sensitive-информации в Service:
+        - rg/ru/android/insecure_transmission_of_sensitive_information_in_service.md
+        - rg/ru/android/insecure_transmission_of_sensitive_information_in_external_service.md
+        - rg/ru/android/insecure_transmission_of_sensitive_information_in_internal_service.md
+      - Передача sensitive-информации по сети:
+        - rg/ru/android/inclusion_of_sensitive_information_into_the_get_request_parameters.md
+        - rg/ru/android/inclusion_of_sensitive_information_into_an_https_request.md
+        - rg/ru/android/transmission_of_sensitive_information_in_an_http_request.md
+        - rg/ru/android/transmission_of_sensitive_information_in_an_http_response.md
+        - rg/ru/android/inclusion_of_sensitive_information_into_an_https_response.md
+      - Хранение sensitive-информации:
+        - rg/ru/android/storing_sensitive_information_in_memory.md
+        - rg/ru/android/storing_sensitive_information_in_a_public_file_outside_the_application_s_directory.md
+        - rg/ru/android/storing_sensitive_information_in_a_public_file_inside_the_application_s_directory.md
+        - rg/ru/android/storing_sensitive_information_in_a_private_file_outside_the_application_s_directory.md
+        - rg/ru/android/storing_sensitive_information_in_a_private_file_inside_the_application_s_directory.md
+        - rg/ru/android/storing_sensitive_information_in_a_public_protected_database.md
+        - rg/ru/android/storing_sensitive_information_in_a_protected_database.md
+        - rg/ru/android/storing_sensitive_information_in_an_insecure_database.md
+        - rg/ru/android/storing_sensitive_information_in_a_public_unprotected_database.md
+        - rg/ru/android/storing_sensitive_information_in_the_application_source_code.md
+        - rg/ru/android/storage_or_use_of_previously_found_sensitive_information.md
+        - rg/ru/android/storing_sensitive_information_in_the_keyboard_cache.md
+      - Хранение ключей/сертификатов:
+        - rg/ru/android/storing_a_private_key_certificate_that_is_not_protected_by_a_password_in_the_directory_resources_of_the_application.md
+        - rg/ru/android/storing_a_public_key_certificate_in_the_directory_resources_of_the_application.md
+        - rg/ru/android/storing_a_private_key_certificate_protected_by_a_password_in_the_directory_resources_of_the_application.md
+        - rg/ru/android/storing_a_key_certificate_in_the_directory_resources_of_the_application.md
+      - rg/ru/android/output_of_sensitive_information_into_the_system_log.md
+      - rg/ru/android/insecure_signature_algorithm.md
+      - rg/ru/android/insufficient_length_of_a_signature_key.md
+      - rg/ru/android/transmission_of_sensitive_information_in_broadcastreceiver.md
+      - rg/ru/android/transmission_of_sensitive_information_to_a_private_broadcastreceiver.md
+      - rg/ru/android/transmission_of_sensitive_information_in_sql_query_parameters.md
+      - rg/ru/android/possibility_to_create_a_backup_copy_of_the_application.md
+      - rg/ru/android/application_is_not_obfuscated.md
+      - rg/ru/android/weak_database_encryption_password.md
+      - rg/ru/android/interception_of_the_database_encryption_password.md
+      - rg/ru/android/an_application_allows_network_connections_via_http.md
+      - rg/ru/android/insecure_networking_configuration.md
+      - rg/ru/android/potential_execution_of_arbitrary_code_within_the_application.md
+      - rg/ru/android/storing_cookie_values_in_the_standard_webview_database.md
+      - rg/ru/android/insecure_settings_in_androidmanifest.xml.md
+      - rg/ru/android/insecure_settings_in_androidmanifest.xml._the_android_hasfragileuserdata_flag.md
+      - rg/ru/android/insecure_settings_in_androidmanifest.xml._the_android_requestlegacyexternalstorage_flag.md
+      - rg/ru/android/ssl-pinning_is_missing_or_incorrectly_realized.md
+      - rg/ru/android/ability_to_run_private_activity_indirectly.md
+      - rg/ru/android/url_spoofing_possibility.md
+      - rg/ru/android/ability_to_open_an_arbitrary_url_in_webview.md
+      - rg/ru/android/access_to_an_arbitrary_file.md
+      - rg/ru/android/access_to_an_arbitrary_contentprovider.md
+      - rg\ru\android\ability_to_access_an_arbitrary_file_via_contentprovider.md
+      - rg\ru\android\absence_of_root_access_check.md
+      - rg\ru\android\absense_of_emulator_start-up_check.md
+      - rg\ru\android\absence_of_app_integrity_check.md
+      - rg\ru\android\insufficient_emulator_start-up_check.md
+      - rg\ru\android\insufficient_root_access_check.md
+      - rg/ru/android/overwrite_files_when_using_public_archives.md
+    - Рекомендации для iOS:
+      - Хранение ключей/сертификатов:
+        - rg/ru/ios/storing_a_key_certificate_in_the_directory_resources_of_the_application_ios.md
+        - rg/ru/ios/storing_a_private_key_certificate_protected_by_a_password_in_the_directory_resources_of_the_application_ios.md
+        - rg/ru/ios/storing_a_public_key_certificate_in_the_directory_resources_of_the_application_ios.md
+        - rg/ru/ios/storing_a_private_key_certificate_that_is_not_protected_by_a_password_in_the_directory_resources_of_the_application_ios.md
+      - Небезопасное хранение ключевой информации:
+        - rg/ru/ios/a_writable_keystore_ios.md
+        - rg/ru/ios/a_keystore_with_write_permission_protected_by_a_weak_password_ios.md
+        - rg/ru/ios/readable_file_keystore_ios.md
+        - rg/ru/ios/a_readable_keystore,_protected_by_a_weak_password,_with_private_keys_ios.md
+        - rg/ru/ios/a_readable_keystore,_protected_by_a_weak_password,_with_public_keys_ios.md
+        - rg/ru/ios/a_readable_keystore_containing_private_keys_protected_by_a_weak_password_ios.md
+        - rg/ru/ios/using_a_file_keystore_ios.md
+        - rg/ru/ios/a_keystore,_protected_by_weak_password,_containing_private_keys_ios.md
+        - rg/ru/ios/a_keystore,_protected_by_weak_password,_containing_public_keys_ios.md
+        - rg/ru/ios/a_keystore_containing_private_keys_protected_by_a_weak_password_ios.md
+      - rg/ru/ios/enabled_caching_of_network_requests_ios.md
+      - rg/ru/ios/output_of_sensitive_information_into_the_system_log_ios.md
+      - rg/ru/ios/insecure_app_transport_security_configuration_ios.md
+      - rg/ru/ios/application_does_not_use_overflow_protection_features_ios.md
+      - rg/ru/ios/presence_of_build_scripts_in_the_built_application_package_ios.md
+      - rg/ru/ios/presence_of_podfile_in_the_built_application_package_ios.md
+      - rg/ru/ios/storing_sensitive_information_in_the_keyboard_cache_ios.md
+      - rg/ru/ios/storing_sensitive_information_in_nsuserdefaults_ios.md
+      - rg/ru/ios/storing_sensitive_information_in_a_private_file_ios.md
+      - rg/ru/ios/storing_sensitive_information_in_the_application_source_code_ios.md
+      - rg/ru/ios/storing_sensitive_information_in_binary_cookies_ios.md
+      - rg/ru/ios/storage_or_use_of_previously_found_sensitive_information_ios.md
+  - FAQ: faq/index.md
+
+
+
+theme:
+  language: ru
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+  name: material
+  custom_dir: overrides
+  palette:
+    - media: "(prefers-color-scheme: light)" 
+      scheme: stingray
+  #    toggle:
+  #      icon: material/weather-night
+  #      name: Switch to dark mode
+  #  - media: "(prefers-color-scheme: dark)" 
+  #    scheme: slate
+  #    toggle:
+  #      icon: material/weather-sunny
+  #      name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.shares
+    - content.code.annotate
+    - content.tabs.link
+# Убрать правую колонку
+#    - toc.integrate
+#    - navigation.sections
+extra_css:
+  - stylesheets/extra.css
+  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css
+
+plugins:
+#  - git-revision-date-localized:
+#      type: iso_datetime
+  - search:
+      lang: 
+        - en
+        - ru
+
+# extra:
+#  social:
+#    - icon: fontawesome/brands/twitter 
+#      link: https://twitter.com/squidfunk
+#    - icon: fontawesome/brands/github 
+#      link: https://twitter.com/squidfunk
+
+markdown_extensions:
+  - meta
+  - abbr
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      linenums: true
+      anchor_linenums: true
+      # use_pygments: false
+      # auto_title: true
+      linenums_style: pymdownx-inline
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+#      permalink: ⚓︎
+
+#extra_javascript:
+#  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js
+#  - javascripts/highlight.js
+#  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+#  - javascripts/tablesort.js
+
+# repo_url: https://github.com/andreygladilin/mktest
+# repo_name: andreygladilin/mktest

@@ -1,4 +1,4 @@
-# Система дистрибуции AppCenter
+# Система дистрибьюции AppCenter
 
 ## Параметры запуска
 
@@ -15,7 +15,7 @@
 * `summary_report_json_file_name` — опциональный параметр. Определяет имя JSON файла, в который выгружается информация по сканированию в формате JSON. При отсутствии параметра информация сохраняться в JSON не будет;
 * `pdf_report_file_name` — опциональный параметр. Определяет имя PDF файла в который выгружается информация по сканированию в формате PDF. При отсутствии параметра PDF-отчет сохраняться не будет.
 
-Для загрузки приложения из системы дистрибуции AppCenter при запуске необходимо указать параметр `distribution_system appcenter`. Также необходимо указать обязательные параметры:
+Для загрузки приложения из системы дистрибьюции AppCenter при запуске необходимо указать параметр `distribution_system appcenter`. Также необходимо указать обязательные параметры:
 
 * `appcenter_token` — API токен для доступа. Как его получить, можно узнать [здесь](https://docs.microsoft.com/en-us/appcenter/api-docs/);
 * `appcenter_owner_name` — владелец приложения. Как узнать имя владельца, можно прочитать [здесь](https://intercom.help/appcenter/en/articles/1764707-how-to-find-the-app-name-and-owner-name-from-your-app-url) или в [официальной документации](https://docs.microsoft.com/en-us/appcenter/api-docs/#find-your-app-center-app-name-and-owner-name);
